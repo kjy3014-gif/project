@@ -4,134 +4,59 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#241b58">
-  <title>숫자 구조대 - 숫자 줄서기 대작전</title>
+  <title>숫자 구조대 - 학습 모드 선택</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="game.css">
-  <script src="game.js" defer></script>
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="숫자 구조대 처음으로">
-      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <header class="home-header">
+    <a class="home-brand" href="#home" aria-label="숫자 구조대 첫 화면">
+      <span class="brand-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span>숫자 구조대</span>
     </a>
-    <div class="topbar-actions">
-      <span class="edition-label"><span class="live-dot"></span> ALGORITHM ARCADE</span>
-      <a class="study-link" href="visualizer.html">시각화로 공부하기 <span aria-hidden="true">↗</span></a>
-      <a class="game-download" href="./sort-quest-game.html" download="숫자-구조대.html" aria-label="게임 오프라인 파일 다운로드">
-        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 2.5v9m0 0 3.4-3.4M10 11.5 6.6 8.1M3.5 13.2v3.3h13v-3.3"/></svg>
-        <span>게임 받기</span>
-      </a>
-    </div>
+    <span class="course-label"><span></span> 정렬 알고리즘 플레이그라운드</span>
   </header>
 
-  <main id="top" class="game-shell">
-    <section class="hero" aria-labelledby="game-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span> SORT QUEST · NUMBER RESCUE</p>
-        <h1 id="game-title">숫자 줄서기<br><span>대작전!</span></h1>
-        <p class="hero-description">뒤죽박죽 숫자들 사이에서 가장 작은 수를 찾아요.<br>연속으로 성공해 최고 점수에 도전해 보세요.</p>
-        <div class="hero-note"><span class="note-star" aria-hidden="true">✦</span> 빠른 눈썰미와 정렬 감각이 필요해요</div>
+  <main id="home" class="home-shell">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <p class="eyebrow"><span></span> SORTING LAB · CHOOSE YOUR MODE</p>
+      <h1 id="welcome-title">숫자 줄서기,<br><em>어떻게 배워볼까요?</em></h1>
+      <p class="welcome-copy">원리를 차근차근 살펴보거나, 미션을 풀며 실력을 시험해 보세요.<br>오늘의 학습 모드를 골라 시작하면 됩니다.</p>
+      <div class="algorithm-tags" aria-label="학습할 알고리즘">
+        <span>버블 정렬</span><span>선택 정렬</span><span>삽입 정렬</span><span>퀵 정렬</span>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <svg viewBox="0 0 360 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M26 195H332" stroke="#9FA2FF" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>
-          <path d="M52 162C97 158 115 127 151 132C194 138 201 82 242 88C278 93 290 52 321 38" stroke="#FFD978" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 8"/>
-          <circle cx="52" cy="162" r="6" fill="#FFD978"/><circle cx="151" cy="132" r="6" fill="#FFD978"/><circle cx="242" cy="88" r="6" fill="#FFD978"/><circle cx="321" cy="38" r="6" fill="#FFD978"/>
-          <rect x="38" y="142" width="34" height="53" rx="10" fill="#F28B74"/>
-          <rect x="86" y="120" width="34" height="75" rx="10" fill="#FFA96B"/>
-          <rect x="134" y="103" width="34" height="92" rx="10" fill="#FFD36D"/>
-          <rect x="182" y="79" width="34" height="116" rx="10" fill="#78D6B3"/>
-          <rect x="230" y="58" width="34" height="137" rx="10" fill="#5CC6C7"/>
-          <rect x="278" y="33" width="34" height="162" rx="10" fill="#8C8BFF"/>
-          <path d="m315 35 12-3-4 12" stroke="#FFD978" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="43" cy="48" r="4" fill="#F28B74"/><circle cx="84" cy="31" r="3" fill="#78D6B3"/><circle cx="304" cy="218" r="4" fill="#FFD978"/>
-        </svg>
-        <span class="art-caption">FIND THE ORDER</span>
-      </div>
-      <div class="hero-sticker"><span>오늘의 미션</span><strong>작은 수부터<br>구출하기</strong><span class="sticker-spark" aria-hidden="true">✳</span></div>
+      <div class="welcome-orbit orbit-one"></div><div class="welcome-orbit orbit-two"></div>
+      <svg class="welcome-art" viewBox="0 0 180 145" fill="none" aria-hidden="true">
+        <path d="M12 126H168" stroke="#B8B4F1" stroke-width="2" stroke-linecap="round"/>
+        <path d="M27 98C57 95 65 78 89 72C111 66 126 51 151 28" stroke="#FFD875" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 7"/>
+        <rect x="20" y="91" width="20" height="35" rx="6" fill="#FF927D"/><rect x="50" y="80" width="20" height="46" rx="6" fill="#FFBD68"/><rect x="80" y="66" width="20" height="60" rx="6" fill="#FFD875"/><rect x="110" y="49" width="20" height="77" rx="6" fill="#63D1AE"/><rect x="140" y="25" width="20" height="101" rx="6" fill="#9290FF"/>
+        <circle cx="27" cy="98" r="4" fill="#FFF"/><circle cx="89" cy="72" r="4" fill="#FFF"/><circle cx="151" cy="28" r="4" fill="#FFF"/>
+      </svg>
     </section>
 
-    <section class="game-layout" aria-label="숫자 정렬 게임">
-      <article class="play-card">
-        <div class="play-card-top">
-          <div class="round-label"><span>ROUND</span><strong id="round-number">준비</strong></div>
-          <div class="game-metrics" aria-label="현재 게임 기록">
-            <div class="metric"><span>점수</span><strong id="score">0</strong></div>
-            <div class="metric"><span>콤보</span><strong><span id="combo">0</span><small>연속</small></strong></div>
-            <div class="metric lives-metric"><span>기회</span><strong><span id="lives">3</span><small>/ 3</small></strong></div>
-          </div>
-        </div>
-        <div class="round-progress" aria-label="라운드 진행률"><span id="round-progress-fill"></span></div>
+    <section class="mode-section" aria-labelledby="mode-heading">
+      <div class="section-intro"><div><p class="section-kicker">PICK YOUR PATH</p><h2 id="mode-heading">나에게 맞는 모드 선택</h2></div><span class="step-count">01 <i>/</i> 02</span></div>
+      <div class="mode-grid">
+        <a class="mode-card game-card" href="game.html">
+          <div class="card-topline"><span class="mode-number">MODE 01</span><span class="mode-icon game-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 7.5h8a4 4 0 0 1 3.8 2.8l1 3.4a2.3 2.3 0 0 1-3.7 2.4l-2-1.6H8.9l-2 1.6a2.3 2.3 0 0 1-3.7-2.4l1-3.4A4 4 0 0 1 8 7.5Z" stroke="currentColor" stroke-width="1.7"/><path d="M8 10v4m-2-2h4m5-.7h.01M17 13.3h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div>
+          <div class="card-copy"><p class="card-label">PLAY & LEARN</p><h3>게임 모드</h3><p class="card-description">비교하고, 옮기고, 자리를 찾아요.<br>네 가지 알고리즘 미션에 도전하세요.</p></div>
+          <div class="card-bottom"><span>점수 · 콤보 · 라운드 미션</span><span class="card-cta">게임 시작 <b aria-hidden="true">→</b></span></div>
+          <span class="card-decoration decoration-game" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
 
-        <div class="mission-prompt">
-          <span class="prompt-tag">MISSION</span>
-          <strong id="mission-instruction">난이도를 고르고 게임을 시작하세요!</strong>
-          <span id="timer" class="timer is-unlimited">제한 없음</span>
-        </div>
-        <div class="timer-track" hidden><span id="timer-fill"></span></div>
-
-        <div id="selection-board">
-          <div class="sort-lane-wrap">
-            <div class="lane-heading"><span>정렬 완료</span><span id="sorted-count">0 / 0</span></div>
-            <div id="sorted-lane" class="sorted-lane" aria-label="정렬된 숫자"></div>
-          </div>
-          <div class="tile-pool-wrap">
-            <div class="lane-heading"><span>숫자 더미 <small>가장 작은 수를 눌러요</small></span><span class="tap-hint">TAP A TILE</span></div>
-            <div id="number-pool" class="number-pool" role="group" aria-label="정렬할 숫자 선택"></div>
-          </div>
-        </div>
-        <div id="operation-board" class="operation-board" hidden>
-          <div class="lane-heading"><span id="operation-label">알고리즘 행동</span><span id="operation-counter"></span></div>
-          <div id="operation-array" class="operation-array"></div>
-          <p id="operation-question" class="operation-question"></p>
-          <div id="operation-choices" class="operation-choices"></div>
-        </div>
-
-        <p id="game-message" class="game-message" role="status" aria-live="polite">숫자를 오름차순으로 정리하면 미션 성공!</p>
-        <div class="game-actions">
-          <button id="start-button" class="primary-button" type="button"><span>게임 시작</span><span aria-hidden="true">→</span></button>
-          <button id="restart-button" class="secondary-button" type="button" hidden>이번 판 다시하기</button>
-          <button id="next-button" class="primary-button next-button" type="button" hidden><span>다음 라운드</span><span aria-hidden="true">→</span></button>
-        </div>
-      </article>
-
-      <aside class="side-stack">
-        <section class="difficulty-card">
-          <div class="side-heading"><span class="side-kicker">CHOOSE YOUR LEVEL</span><h2>도전 난이도</h2></div>
-          <div class="difficulty-options" role="group" aria-label="게임 난이도">
-            <button class="difficulty-option is-selected" type="button" data-count="5" data-timed="false" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="7" data-timed="false" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="9" data-timed="true" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 카운트다운</small></span><span class="option-check">✓</span></button>
-          </div>
-          <p class="level-hint">라운드가 올라갈수록 숫자가 하나씩 늘어요.</p>
-        </section>
-
-        <section class="algorithm-card">
-          <div class="side-heading"><span class="side-kicker">PICK YOUR ALGORITHM</span><h2>알고리즘 고르기</h2></div>
-          <div class="algorithm-options" role="group" aria-label="게임할 정렬 알고리즘">
-            <button class="algorithm-option is-selected" type="button" data-algorithm="selection" aria-pressed="true"><span class="algorithm-icon selection-icon">S</span><span><strong>선택</strong><small>최솟값 찾기</small></span></button>
-            <button class="algorithm-option" type="button" data-algorithm="bubble" aria-pressed="false"><span class="algorithm-icon bubble-icon">B</span><span><strong>버블</strong><small>이웃 비교</small></span></button>
-            <button class="algorithm-option" type="button" data-algorithm="insertion" aria-pressed="false"><span class="algorithm-icon insertion-icon">I</span><span><strong>삽입</strong><small>자리 끼우기</small></span></button>
-            <button class="algorithm-option" type="button" data-algorithm="quick" aria-pressed="false"><span class="algorithm-icon quick-icon">Q</span><span><strong>퀵</strong><small>Pivot 분할</small></span></button>
-          </div>
-          <p id="algorithm-description" class="algorithm-description">남은 숫자 중 가장 작은 값을 골라 앞에서부터 확정해요.</p>
-          <div id="algorithm-result" class="selection-result" hidden>
-            <span id="result-heading">이번 배열 실행 통계</span>
-            <div><strong id="result-comparisons">0</strong><small>비교</small><b>·</b><strong id="result-movements">0</strong><small id="result-movement-label">교환</small></div>
-          </div>
-        </section>
-
-        <section class="howto-card">
-          <span class="side-kicker">HOW TO PLAY</span>
-          <p><b>가장 작은 숫자를 탭!</b><br>틀려도 괜찮아요. 숫자를 다시 비교해 다음 수를 찾아보세요.</p>
-        </section>
-      </aside>
+        <a class="mode-card study-card" href="visualizer.html">
+          <div class="card-topline"><span class="mode-number">MODE 02</span><span class="mode-icon study-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M7 15v-3m4 3V8m4 7V5m4 10v-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span></div>
+          <div class="card-copy"><p class="card-label">WATCH & UNDERSTAND</p><h3>학습 모드</h3><p class="card-description">숫자가 비교되고 이동하는 과정을<br>한 단계씩 천천히 살펴보세요.</p></div>
+          <div class="card-bottom"><span>원리 설명 · 단계별 시각화</span><span class="card-cta">학습 시작 <b aria-hidden="true">→</b></span></div>
+          <span class="card-decoration decoration-study" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
+      </div>
+      <p class="mode-tip"><span class="tip-mark" aria-hidden="true">i</span> 처음이라면 학습 모드로 원리를 살펴본 뒤, 게임 모드에서 도전해 보세요.</p>
     </section>
 
-    <footer class="game-footer"><span>눈썰미가 레벨업 중!</span><span>숫자 구조대 <i>·</i> 알고리즘 아케이드</span></footer>
+    <footer class="home-footer"><span>비교하는 방법은 달라도, 목표는 하나. 숫자를 질서 있게!</span><span>숫자 구조대 <i>·</i> 정보 수업</span></footer>
   </main>
 </body>
 </html>
