@@ -93,6 +93,7 @@ h1 { margin: 0; color: #fff; font-size: clamp(32px, 4.2vw, 48px); line-height: 1
 .insertion-strip { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
 .insertion-gap { width: 26px; min-height: 39px; border: 1px dashed #a69beb; border-radius: 6px; color: #7568d6; background: #f8f7ff; cursor: pointer; font: 700 14px "DM Mono", monospace; transition: background .12s, transform .12s; }
 .insertion-gap:hover { transform: scale(1.08); background: #eae7ff; }
+.timer.is-unlimited { min-width: 76px; color: #8984a0; font: 700 10px "Noto Sans KR", sans-serif; }
 @media (max-width: 700px) { .algorithm-option { min-height: 47px; }.algorithm-options { gap: 5px; }.array-token { min-width: 40px; height: 42px; font-size: 12px; }.insertion-gap { width: 21px; } }
 
   </style>
@@ -150,9 +151,9 @@ h1 { margin: 0; color: #fff; font-size: clamp(32px, 4.2vw, 48px); line-height: 1
         <div class="mission-prompt">
           <span class="prompt-tag">MISSION</span>
           <strong id="mission-instruction">난이도를 고르고 게임을 시작하세요!</strong>
-          <span id="timer" class="timer">--:--</span>
+          <span id="timer" class="timer is-unlimited">제한 없음</span>
         </div>
-        <div class="timer-track"><span id="timer-fill"></span></div>
+        <div class="timer-track" hidden><span id="timer-fill"></span></div>
 
         <div id="selection-board">
           <div class="sort-lane-wrap">
@@ -183,9 +184,9 @@ h1 { margin: 0; color: #fff; font-size: clamp(32px, 4.2vw, 48px); line-height: 1
         <section class="difficulty-card">
           <div class="side-heading"><span class="side-kicker">CHOOSE YOUR LEVEL</span><h2>도전 난이도</h2></div>
           <div class="difficulty-options" role="group" aria-label="게임 난이도">
-            <button class="difficulty-option is-selected" type="button" data-count="5" data-time="55" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 여유롭게</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="7" data-time="48" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 콤보 도전</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="9" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 시간 제한</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option is-selected" type="button" data-count="5" data-timed="false" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="7" data-timed="false" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="9" data-timed="true" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 카운트다운</small></span><span class="option-check">✓</span></button>
           </div>
           <p class="level-hint">라운드가 올라갈수록 숫자가 하나씩 늘어요.</p>
         </section>
@@ -224,7 +225,7 @@ const algorithms = {
 
 const ui = {
   round: document.querySelector("#round-number"), score: document.querySelector("#score"), combo: document.querySelector("#combo"), lives: document.querySelector("#lives"),
-  progress: document.querySelector("#round-progress-fill"), instruction: document.querySelector("#mission-instruction"), timer: document.querySelector("#timer"), timerFill: document.querySelector("#timer-fill"),
+  progress: document.querySelector("#round-progress-fill"), instruction: document.querySelector("#mission-instruction"), timer: document.querySelector("#timer"), timerFill: document.querySelector("#timer-fill"), timerTrack: document.querySelector(".timer-track"),
   selectionBoard: document.querySelector("#selection-board"), lane: document.querySelector("#sorted-lane"), sortedCount: document.querySelector("#sorted-count"), pool: document.querySelector("#number-pool"),
   operationBoard: document.querySelector("#operation-board"), operationLabel: document.querySelector("#operation-label"), operationCounter: document.querySelector("#operation-counter"), operationArray: document.querySelector("#operation-array"), operationQuestion: document.querySelector("#operation-question"), operationChoices: document.querySelector("#operation-choices"),
   message: document.querySelector("#game-message"), start: document.querySelector("#start-button"), restart: document.querySelector("#restart-button"), next: document.querySelector("#next-button"),
@@ -235,6 +236,7 @@ const ui = {
 let algorithm = "selection";
 let baseCount = 5;
 let baseTime = 55;
+let hasTimeLimit = false;
 let roundNumber = 0;
 let roundCount = 5;
 let score = 0;
@@ -275,6 +277,15 @@ function stopTimer() {
 }
 
 function updateTimer() {
+  if (!hasTimeLimit) {
+    ui.timer.textContent = "제한 없음";
+    ui.timer.classList.add("is-unlimited");
+    ui.timer.classList.remove("is-low");
+    ui.timerFill.style.width = "100%";
+    ui.timerFill.classList.remove("is-low");
+    return;
+  }
+  ui.timer.classList.remove("is-unlimited");
   ui.timer.textContent = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
   ui.timerFill.style.width = `${duration ? remaining / duration * 100 : 0}%`;
   const low = remaining <= 10;
@@ -770,7 +781,9 @@ function resetToReady() {
   ui.instruction.textContent = "난이도를 고르고 게임을 시작하세요!";
   ui.message.className = "game-message";
   ui.message.textContent = "알고리즘을 고르고 숫자 줄서기 미션에 도전해요!";
-  ui.timer.textContent = "--:--";
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
   ui.timer.classList.remove("is-low");
   ui.timerFill.style.width = "100%";
   ui.timerFill.classList.remove("is-low");
@@ -859,15 +872,18 @@ function startRound() {
   const expected = calculateStats(startingArray);
   const steps = expected.comparisons + expected.movements;
   const secondsPerStep = algorithm === "bubble" || algorithm === "quick" ? .75 : 1.1;
-  duration = Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12));
-  remaining = duration;
+  duration = hasTimeLimit ? Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12)) : 0;
+  remaining = hasTimeLimit ? duration : 0;
+  ui.timerTrack.hidden = !hasTimeLimit;
   updateScoreboard();
   updateTimer();
-  timerId = window.setInterval(() => {
-    remaining -= 1;
-    updateTimer();
-    if (remaining <= 0) endGame("시간이 다 됐어요. 다음 도전에서 다시 줄을 세워봐요!");
-  }, 1000);
+  if (hasTimeLimit) {
+    timerId = window.setInterval(() => {
+      remaining -= 1;
+      updateTimer();
+      if (remaining <= 0) endGame("시간이 다 됐어요. 다음 도전에서 다시 줄을 세워봐요!");
+    }, 1000);
+  }
 }
 
 function endGame(message) {
@@ -1518,7 +1534,9 @@ function resetToReady() {
   ui.instruction.textContent = "알고리즘을 고르고 게임을 시작하세요!";
   ui.message.className = "game-message";
   ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
-  ui.timer.textContent = "--:--";
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
   ui.timer.classList.remove("is-low");
   ui.timerFill.style.width = "100%";
   ui.timerFill.classList.remove("is-low");
@@ -1542,12 +1560,17 @@ function resetToReady() {
 ui.difficulty.forEach(button => button.addEventListener("click", () => {
   if (running) return;
   baseCount = Number(button.dataset.count);
-  baseTime = Number(button.dataset.time);
+  hasTimeLimit = button.dataset.timed === "true";
+  if (hasTimeLimit) baseTime = Number(button.dataset.time);
   ui.difficulty.forEach(option => {
     const selected = option === button;
     option.classList.toggle("is-selected", selected);
     option.setAttribute("aria-pressed", String(selected));
   });
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
+  ui.timerFill.style.width = "100%";
   if (roundNumber > 0) resetToReady();
 }));
 
@@ -1578,7 +1601,9 @@ ui.next.addEventListener("click", () => {
 });
 
 ui.round.textContent = "준비";
-ui.timer.textContent = "--:--";
+ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+ui.timerTrack.hidden = !hasTimeLimit;
 ui.sortedCount.textContent = "0 / 0";
 ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
 ui.operationQuestion.textContent = "";

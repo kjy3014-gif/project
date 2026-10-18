@@ -7,7 +7,7 @@ const algorithms = {
 
 const ui = {
   round: document.querySelector("#round-number"), score: document.querySelector("#score"), combo: document.querySelector("#combo"), lives: document.querySelector("#lives"),
-  progress: document.querySelector("#round-progress-fill"), instruction: document.querySelector("#mission-instruction"), timer: document.querySelector("#timer"), timerFill: document.querySelector("#timer-fill"),
+  progress: document.querySelector("#round-progress-fill"), instruction: document.querySelector("#mission-instruction"), timer: document.querySelector("#timer"), timerFill: document.querySelector("#timer-fill"), timerTrack: document.querySelector(".timer-track"),
   selectionBoard: document.querySelector("#selection-board"), lane: document.querySelector("#sorted-lane"), sortedCount: document.querySelector("#sorted-count"), pool: document.querySelector("#number-pool"),
   operationBoard: document.querySelector("#operation-board"), operationLabel: document.querySelector("#operation-label"), operationCounter: document.querySelector("#operation-counter"), operationArray: document.querySelector("#operation-array"), operationQuestion: document.querySelector("#operation-question"), operationChoices: document.querySelector("#operation-choices"),
   message: document.querySelector("#game-message"), start: document.querySelector("#start-button"), restart: document.querySelector("#restart-button"), next: document.querySelector("#next-button"),
@@ -18,6 +18,7 @@ const ui = {
 let algorithm = "selection";
 let baseCount = 5;
 let baseTime = 55;
+let hasTimeLimit = false;
 let roundNumber = 0;
 let roundCount = 5;
 let score = 0;
@@ -58,6 +59,15 @@ function stopTimer() {
 }
 
 function updateTimer() {
+  if (!hasTimeLimit) {
+    ui.timer.textContent = "제한 없음";
+    ui.timer.classList.add("is-unlimited");
+    ui.timer.classList.remove("is-low");
+    ui.timerFill.style.width = "100%";
+    ui.timerFill.classList.remove("is-low");
+    return;
+  }
+  ui.timer.classList.remove("is-unlimited");
   ui.timer.textContent = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
   ui.timerFill.style.width = `${duration ? remaining / duration * 100 : 0}%`;
   const low = remaining <= 10;
@@ -553,7 +563,9 @@ function resetToReady() {
   ui.instruction.textContent = "난이도를 고르고 게임을 시작하세요!";
   ui.message.className = "game-message";
   ui.message.textContent = "알고리즘을 고르고 숫자 줄서기 미션에 도전해요!";
-  ui.timer.textContent = "--:--";
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
   ui.timer.classList.remove("is-low");
   ui.timerFill.style.width = "100%";
   ui.timerFill.classList.remove("is-low");
@@ -642,15 +654,18 @@ function startRound() {
   const expected = calculateStats(startingArray);
   const steps = expected.comparisons + expected.movements;
   const secondsPerStep = algorithm === "bubble" || algorithm === "quick" ? .75 : 1.1;
-  duration = Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12));
-  remaining = duration;
+  duration = hasTimeLimit ? Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12)) : 0;
+  remaining = hasTimeLimit ? duration : 0;
+  ui.timerTrack.hidden = !hasTimeLimit;
   updateScoreboard();
   updateTimer();
-  timerId = window.setInterval(() => {
-    remaining -= 1;
-    updateTimer();
-    if (remaining <= 0) endGame("시간이 다 됐어요. 다음 도전에서 다시 줄을 세워봐요!");
-  }, 1000);
+  if (hasTimeLimit) {
+    timerId = window.setInterval(() => {
+      remaining -= 1;
+      updateTimer();
+      if (remaining <= 0) endGame("시간이 다 됐어요. 다음 도전에서 다시 줄을 세워봐요!");
+    }, 1000);
+  }
 }
 
 function endGame(message) {
@@ -1301,7 +1316,9 @@ function resetToReady() {
   ui.instruction.textContent = "알고리즘을 고르고 게임을 시작하세요!";
   ui.message.className = "game-message";
   ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
-  ui.timer.textContent = "--:--";
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
   ui.timer.classList.remove("is-low");
   ui.timerFill.style.width = "100%";
   ui.timerFill.classList.remove("is-low");
@@ -1325,12 +1342,17 @@ function resetToReady() {
 ui.difficulty.forEach(button => button.addEventListener("click", () => {
   if (running) return;
   baseCount = Number(button.dataset.count);
-  baseTime = Number(button.dataset.time);
+  hasTimeLimit = button.dataset.timed === "true";
+  if (hasTimeLimit) baseTime = Number(button.dataset.time);
   ui.difficulty.forEach(option => {
     const selected = option === button;
     option.classList.toggle("is-selected", selected);
     option.setAttribute("aria-pressed", String(selected));
   });
+  ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+  ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+  ui.timerTrack.hidden = !hasTimeLimit;
+  ui.timerFill.style.width = "100%";
   if (roundNumber > 0) resetToReady();
 }));
 
@@ -1361,7 +1383,9 @@ ui.next.addEventListener("click", () => {
 });
 
 ui.round.textContent = "준비";
-ui.timer.textContent = "--:--";
+ui.timer.textContent = hasTimeLimit ? "--:--" : "제한 없음";
+ui.timer.classList.toggle("is-unlimited", !hasTimeLimit);
+ui.timerTrack.hidden = !hasTimeLimit;
 ui.sortedCount.textContent = "0 / 0";
 ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
 ui.operationQuestion.textContent = "";

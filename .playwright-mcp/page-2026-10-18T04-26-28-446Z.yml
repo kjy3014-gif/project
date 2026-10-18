@@ -1,0 +1,124 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "숫자 구조대 처음으로" [ref=e3] [cursor=pointer]:
+      - /url: "#top"
+      - generic [ref=e9]: 숫자 구조대
+    - generic [ref=e10]:
+      - generic [ref=e11]: ALGORITHM ARCADE
+      - link "시각화로 공부하기" [ref=e13] [cursor=pointer]:
+        - /url: visualizer.html
+        - text: 시각화로 공부하기
+        - generic [ref=e14]: ↗
+      - link "게임 오프라인 파일 다운로드" [ref=e15] [cursor=pointer]:
+        - /url: ./sort-quest-game.html
+        - img [ref=e16]
+        - generic [ref=e18]: 게임 받기
+  - main [ref=e19]:
+    - region "숫자 줄서기 대작전!" [ref=e20]:
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: SORT QUEST · NUMBER RESCUE
+        - heading "숫자 줄서기 대작전!" [level=1] [ref=e24]:
+          - text: 숫자 줄서기
+          - text: 대작전!
+        - paragraph [ref=e25]:
+          - text: 뒤죽박죽 숫자들 사이에서 가장 작은 수를 찾아요.
+          - text: 연속으로 성공해 최고 점수에 도전해 보세요.
+        - generic [ref=e26]:
+          - generic [ref=e27]: ✦
+          - text: 빠른 눈썰미와 정렬 감각이 필요해요
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - generic [ref=e45]: FIND THE ORDER
+      - generic [ref=e46]:
+        - generic [ref=e47]: 오늘의 미션
+        - strong [ref=e48]:
+          - text: 작은 수부터
+          - text: 구출하기
+        - generic [ref=e50]: ✳
+    - region "숫자 정렬 게임" [ref=e51]:
+      - article [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: ROUND
+            - strong [ref=e56]: 준비
+          - generic "현재 게임 기록" [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: 점수
+              - strong [ref=e60]: "0"
+            - generic [ref=e61]:
+              - generic [ref=e62]: 콤보
+              - strong [ref=e63]: 0연속
+            - generic [ref=e64]:
+              - generic [ref=e65]: 기회
+              - strong [ref=e66]: 3/ 3
+        - generic "라운드 진행률" [ref=e67]
+        - generic [ref=e68]:
+          - generic [ref=e69]: MISSION
+          - strong [ref=e70]: 난이도를 고르고 게임을 시작하세요!
+          - generic [ref=e71]: 제한 없음
+        - generic [ref=e72]:
+          - generic [ref=e74]: 알고리즘 행동
+          - paragraph
+        - status [ref=e76]: 난이도를 선택하고 숫자 줄서기 미션에 도전해요!
+        - button "게임 시작" [ref=e78] [cursor=pointer]:
+          - generic [ref=e79]: 게임 시작
+          - generic [ref=e80]: →
+      - complementary [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - text: CHOOSE YOUR LEVEL
+            - heading "도전 난이도" [level=2] [ref=e84]
+          - group "게임 난이도" [ref=e85]:
+            - button "A 가볍게 숫자 5개 · 시간 제한 없음 ✓" [pressed] [ref=e86] [cursor=pointer]:
+              - generic [ref=e87]: A
+              - generic [ref=e88]:
+                - strong [ref=e89]: 가볍게
+                - generic [ref=e90]: 숫자 5개 · 시간 제한 없음
+              - generic [ref=e91]: ✓
+            - button "B 집중 모드 숫자 7개 · 시간 제한 없음 ✓" [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]: B
+              - generic [ref=e94]:
+                - strong [ref=e95]: 집중 모드
+                - generic [ref=e96]: 숫자 7개 · 시간 제한 없음
+              - generic [ref=e97]: ✓
+            - button "C 스피드 모드 숫자 9개 · 카운트다운 ✓" [ref=e98] [cursor=pointer]:
+              - generic [ref=e99]: C
+              - generic [ref=e100]:
+                - strong [ref=e101]: 스피드 모드
+                - generic [ref=e102]: 숫자 9개 · 카운트다운
+              - generic [ref=e103]: ✓
+          - paragraph [ref=e104]: 라운드가 올라갈수록 숫자가 하나씩 늘어요.
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - text: PICK YOUR ALGORITHM
+            - heading "알고리즘 고르기" [level=2] [ref=e107]
+          - group "게임할 정렬 알고리즘" [ref=e108]:
+            - button "S 선택 최솟값 찾기" [pressed] [ref=e109] [cursor=pointer]:
+              - generic [ref=e110]: S
+              - generic [ref=e111]:
+                - strong [ref=e112]: 선택
+                - generic [ref=e113]: 최솟값 찾기
+            - button "B 버블 이웃 비교" [ref=e114] [cursor=pointer]:
+              - generic [ref=e115]: B
+              - generic [ref=e116]:
+                - strong [ref=e117]: 버블
+                - generic [ref=e118]: 이웃 비교
+            - button "I 삽입 자리 끼우기" [ref=e119] [cursor=pointer]:
+              - generic [ref=e120]: I
+              - generic [ref=e121]:
+                - strong [ref=e122]: 삽입
+                - generic [ref=e123]: 자리 끼우기
+            - button "Q 퀵 Pivot 분할" [ref=e124] [cursor=pointer]:
+              - generic [ref=e125]: Q
+              - generic [ref=e126]:
+                - strong [ref=e127]: 퀵
+                - generic [ref=e128]: Pivot 분할
+          - paragraph [ref=e129]: 남은 숫자 중 가장 작은 값을 골라 앞에서부터 확정해요.
+        - generic [ref=e130]:
+          - generic [ref=e131]: HOW TO PLAY
+          - paragraph [ref=e132]:
+            - text: 가장 작은 숫자를 탭!
+            - text: 틀려도 괜찮아요. 숫자를 다시 비교해 다음 수를 찾아보세요.
+    - generic [ref=e133]:
+      - generic [ref=e134]: 눈썰미가 레벨업 중!
+      - generic [ref=e135]: 숫자 구조대 · 알고리즘 아케이드

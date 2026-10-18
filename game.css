@@ -85,4 +85,5 @@ h1 { margin: 0; color: #fff; font-size: clamp(32px, 4.2vw, 48px); line-height: 1
 .insertion-strip { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
 .insertion-gap { width: 26px; min-height: 39px; border: 1px dashed #a69beb; border-radius: 6px; color: #7568d6; background: #f8f7ff; cursor: pointer; font: 700 14px "DM Mono", monospace; transition: background .12s, transform .12s; }
 .insertion-gap:hover { transform: scale(1.08); background: #eae7ff; }
+.timer.is-unlimited { min-width: 76px; color: #8984a0; font: 700 10px "Noto Sans KR", sans-serif; }
 @media (max-width: 700px) { .algorithm-option { min-height: 47px; }.algorithm-options { gap: 5px; }.array-token { min-width: 40px; height: 42px; font-size: 12px; }.insertion-gap { width: 21px; } }

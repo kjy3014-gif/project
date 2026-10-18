@@ -69,9 +69,9 @@
         <div class="mission-prompt">
           <span class="prompt-tag">MISSION</span>
           <strong id="mission-instruction">난이도를 고르고 게임을 시작하세요!</strong>
-          <span id="timer" class="timer">--:--</span>
+          <span id="timer" class="timer is-unlimited">제한 없음</span>
         </div>
-        <div class="timer-track"><span id="timer-fill"></span></div>
+        <div class="timer-track" hidden><span id="timer-fill"></span></div>
 
         <div id="selection-board">
           <div class="sort-lane-wrap">
@@ -102,9 +102,9 @@
         <section class="difficulty-card">
           <div class="side-heading"><span class="side-kicker">CHOOSE YOUR LEVEL</span><h2>도전 난이도</h2></div>
           <div class="difficulty-options" role="group" aria-label="게임 난이도">
-            <button class="difficulty-option is-selected" type="button" data-count="5" data-time="55" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 여유롭게</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="7" data-time="48" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 콤보 도전</small></span><span class="option-check">✓</span></button>
-            <button class="difficulty-option" type="button" data-count="9" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 시간 제한</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option is-selected" type="button" data-count="5" data-timed="false" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="7" data-timed="false" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 시간 제한 없음</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="9" data-timed="true" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 카운트다운</small></span><span class="option-check">✓</span></button>
           </div>
           <p class="level-hint">라운드가 올라갈수록 숫자가 하나씩 늘어요.</p>
         </section>
