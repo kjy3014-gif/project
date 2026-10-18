@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#241b58">
+  <title>숫자 구조대 - 숫자 줄서기 대작전</title>
+  <style>
+:root {
+  font-family: "Manrope", "Noto Sans KR", sans-serif;
+  color: #201b3e;
+  background: #edeafa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #201b3e;
+  --muted: #817d9c;
+  --purple: #6f5be8;
+  --purple-dark: #4d3fc2;
+  --mint: #58cba6;
+  --yellow: #ffd76e;
+  --coral: #f27f73;
+  --paper: #fff;
+}
+
+* { box-sizing: border-box; }
+body { min-width: 320px; min-height: 100vh; margin: 0; background: radial-gradient(ellipse at 8% 6%, #dad7ff 0, transparent 34%), radial-gradient(ellipse at 93% 25%, #d0f2e8 0, transparent 32%), #f0eef9; font-size: 15px; line-height: 1.5; }
+button, a { font: inherit; }
+button { color: inherit; }
+button:focus-visible, a:focus-visible { outline: 3px solid #806eff; outline-offset: 3px; }
+[hidden] { display: none !important; }
+.topbar { height: 66px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(22px, calc((100vw - 1180px) / 2)); border-bottom: 1px solid #ffffffb8; background: #ffffffbf; backdrop-filter: blur(14px); }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 900; letter-spacing: -.05em; }
+.brand-mark { height: 25px; display: flex; align-items: end; gap: 2px; padding: 4px; border: 1px solid #dad6ff; border-radius: 7px; background: #f1efff; }
+.brand-mark i { width: 3px; border-radius: 3px; background: var(--purple); }.brand-mark i:nth-child(1) { height: 7px; }.brand-mark i:nth-child(2) { height: 11px; }.brand-mark i:nth-child(3) { height: 15px; }.brand-mark i:nth-child(4) { height: 9px; }
+.topbar-actions { display: flex; align-items: center; gap: 16px; }.edition-label { display: inline-flex; align-items: center; gap: 7px; color: #85809d; font-size: 10px; font-weight: 800; letter-spacing: .11em; }.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #48bf95; box-shadow: 0 0 0 3px #48bf9520; }
+.study-link { min-height: 38px; display: inline-flex; align-items: center; gap: 9px; padding: 0 12px; border: 1px solid #e1def1; border-radius: 7px; color: #625b8d; background: #fff; text-decoration: none; font-size: 11px; font-weight: 700; transition: border-color .16s, color .16s, transform .16s; }.study-link:hover { transform: translateY(-1px); border-color: #aaa0f0; color: var(--purple-dark); }
+.game-download { min-height: 38px; display: inline-flex; align-items: center; gap: 6px; padding: 0 11px; border: 1px solid #6658db; border-radius: 7px; color: #fff; background: #6858d9; box-shadow: 0 3px 0 #493bb2; text-decoration: none; font-size: 10px; font-weight: 800; transition: transform .14s, filter .14s; }.game-download:hover { transform: translateY(-1px); filter: brightness(1.08); }.game-download:active { transform: translateY(2px); box-shadow: 0 1px 0 #493bb2; }.game-download svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.game-shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+.hero { position: relative; isolation: isolate; overflow: hidden; min-height: 265px; display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 33px 38px; margin: 25px 0 18px; border: 1px solid #ffffff55; border-radius: 19px; color: #fff; background: linear-gradient(112deg, #2c2366 0%, #5447bb 55%, #297c78 100%); box-shadow: 0 18px 40px #51479b28; }
+.hero::before { position: absolute; z-index: -2; inset: -40%; background: radial-gradient(ellipse at 23% 48%, #b29cff38, transparent 33%), radial-gradient(ellipse at 80% 45%, #63e7bd32, transparent 30%); content: ""; animation: aurora-drift 16s ease-in-out infinite alternate; }
+.hero-copy { position: relative; z-index: 1; max-width: 570px; }.eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 10px; color: #c9c2ff; font-size: 10px; font-weight: 900; letter-spacing: .14em; }.eyebrow-line { width: 19px; height: 2px; border-radius: 2px; background: var(--yellow); }
+h1 { margin: 0; color: #fff; font-size: clamp(32px, 4.2vw, 48px); line-height: 1.15; letter-spacing: -.065em; font-weight: 900; }h1 span { color: var(--yellow); }
+.hero-description { margin: 14px 0 13px; color: #e1ddff; font-size: 13px; line-height: 1.75; }.hero-note { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border: 1px solid #ffffff20; border-radius: 30px; color: #eeeaff; background: #ffffff10; font-size: 10px; }.note-star { color: var(--yellow); font-size: 14px; }
+.hero-art { position: absolute; z-index: -1; right: 104px; top: 50%; width: min(340px, 34%); transform: translateY(-50%); opacity: .9; animation: art-hover 6s ease-in-out infinite; }.hero-art svg { width: 100%; display: block; }.hero-art rect { transform-box: fill-box; transform-origin: center bottom; animation: rise-in .75s cubic-bezier(.2,.8,.2,1) both; }.hero-art rect:nth-of-type(2) { animation-delay: .08s; }.hero-art rect:nth-of-type(3) { animation-delay: .16s; }.hero-art rect:nth-of-type(4) { animation-delay: .24s; }.hero-art rect:nth-of-type(5) { animation-delay: .32s; }.hero-art rect:nth-of-type(6) { animation-delay: .4s; }.hero-art circle { transform-box: fill-box; transform-origin: center; animation: ping 2.7s ease-in-out infinite; }.hero-art circle:nth-of-type(2) { animation-delay: .35s; }.hero-art circle:nth-of-type(3) { animation-delay: .7s; }.hero-art circle:nth-of-type(4) { animation-delay: 1.05s; }
+.art-caption { position: absolute; right: 2px; bottom: 4px; color: #fff9; font: 600 8px "DM Mono", monospace; letter-spacing: .2em; }.hero-sticker { position: relative; z-index: 1; flex: 0 0 112px; display: grid; gap: 4px; padding: 14px 14px 16px; border: 1px solid #ffffff80; border-radius: 12px; color: #34285e; background: var(--yellow); box-shadow: 0 8px 0 #c59e39; transform: rotate(3deg); }.hero-sticker > span:first-child { color: #72572a; font-size: 9px; font-weight: 800; }.hero-sticker strong { font-size: 16px; line-height: 1.35; letter-spacing: -.05em; }.sticker-spark { position: absolute; right: 9px; top: 6px; color: #eb8a4d; font-size: 18px; }
+.game-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(290px, .8fr); gap: 16px; align-items: start; }
+.play-card, .difficulty-card, .algorithm-card, .howto-card { border: 1px solid #fff; border-radius: 13px; background: #fff; box-shadow: 0 5px 18px #342a7420; }
+.play-card { padding: 21px 22px 19px; }
+.play-card-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }.round-label { display: grid; gap: 3px; }.round-label span, .metric > span { color: #9a96b1; font-size: 9px; font-weight: 900; letter-spacing: .14em; }.round-label strong { color: #2c255c; font: 800 23px/1.1 "DM Mono", monospace; letter-spacing: -.06em; }
+.game-metrics { display: flex; align-items: center; gap: clamp(13px, 2vw, 25px); }.metric { min-width: 49px; display: grid; gap: 3px; }.metric strong { color: #31295d; font: 800 21px/1.1 "DM Mono", monospace; }.metric strong small { padding-left: 3px; color: #aaa5bd; font: 600 9px "Noto Sans KR", sans-serif; }.lives-metric strong { color: #e36d73; }
+.round-progress { height: 5px; overflow: hidden; margin-top: 15px; border-radius: 5px; background: #eeecf6; }.round-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7565ed, #48c9a5); transition: width .3s ease; }
+.mission-prompt { display: flex; align-items: center; gap: 10px; margin-top: 21px; }.prompt-tag { flex: 0 0 auto; padding: 4px 7px; border-radius: 4px; color: #fff; background: var(--purple); font: 700 8px "DM Mono", monospace; letter-spacing: .08em; }.mission-prompt > strong { flex: 1; color: #332c57; font-size: 14px; font-weight: 800; }.timer { min-width: 53px; color: #6a5bd0; font: 700 15px "DM Mono", monospace; text-align: right; }.timer.is-low { color: #e45b68; animation: timer-alert .55s ease-in-out infinite alternate; }.timer-track { height: 4px; overflow: hidden; margin-top: 8px; border-radius: 3px; background: #f0edf6; }.timer-track span { display: block; width: 100%; height: 100%; border-radius: inherit; background: #7a6bed; transition: width 1s linear, background .2s; }.timer-track span.is-low { background: #ed6a73; }
+.sort-lane-wrap, .tile-pool-wrap { margin-top: 18px; }.lane-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; color: #827d9b; font-size: 10px; font-weight: 800; }.lane-heading small { padding-left: 6px; color: #aaa6b9; font-size: 9px; font-weight: 500; }.lane-heading > span:last-child { color: #9d98ae; font: 10px "DM Mono", monospace; }.answer-lane { min-height: 61px; display: flex; align-items: center; gap: 7px; padding: 8px; border: 1px dashed #d9d5eb; border-radius: 9px; background: linear-gradient(110deg,#fbfaff,#f6fcfa); }.lane-placeholder { margin: 0 auto; color: #aaa6b8; font-size: 11px; }.sorted-tile { width: 46px; height: 43px; display: grid; place-items: center; border: 1px solid #b8ebd6; border-radius: 8px; color: #277c61; background: #e7f9f0; font: 700 14px "DM Mono", monospace; animation: tile-pop .28s cubic-bezier(.2,.8,.2,1.35) both; }
+.number-pool { min-height: 67px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 0 2px; }.number-tile { min-width: 56px; height: 54px; padding: 0 13px; border: 2px solid transparent; border-radius: 11px; color: #31295d; background: #edeaff; box-shadow: 0 4px 0 #d4cff7; cursor: pointer; font: 800 16px "DM Mono", monospace; transition: transform .12s, box-shadow .12s, filter .12s; }.number-tile:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #d4cff7; filter: saturate(1.12); }.number-tile:active { transform: translateY(1px); box-shadow: 0 2px 0 #d4cff7; }.number-tile:nth-child(5n+2) { background: #e1f8f0; box-shadow: 0 4px 0 #c0ead9; }.number-tile:nth-child(5n+3) { background: #fff1d5; box-shadow: 0 4px 0 #f1d7a2; }.number-tile:nth-child(5n+4) { background: #ffe6e2; box-shadow: 0 4px 0 #edc0b9; }.number-tile:nth-child(5n) { background: #e1f2ff; box-shadow: 0 4px 0 #bbdcf3; }.number-tile.is-wrong { border-color: #ed6c77; animation: wrong-shake .28s ease; }
+.game-message { min-height: 39px; display: flex; align-items: center; margin: 13px 0 8px; padding: 8px 11px; border-radius: 7px; color: #6d6689; background: #f6f4fc; font-size: 11px; font-weight: 600; }.game-message.is-good { color: #267d60; background: #e8f8f0; }.game-message.is-wrong { color: #b64a58; background: #fff0f1; }.game-message.is-win { color: #704f12; background: #fff5d8; }
+.game-actions { display: flex; flex-wrap: wrap; gap: 8px; }.primary-button, .secondary-button { min-height: 45px; display: inline-flex; align-items: center; justify-content: space-between; gap: 26px; padding: 0 15px; border: 0; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 800; transition: transform .15s, filter .15s; }.primary-button { min-width: 168px; color: #fff; background: linear-gradient(105deg,#6858df,#4a45bb); box-shadow: 0 4px 0 #39358f; }.primary-button:hover { transform: translateY(-2px); filter: brightness(1.06); }.primary-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #39358f; }.secondary-button { border: 1px solid #e4e1ef; color: #6c6684; background: #fff; }.secondary-button:hover { background: #f7f5ff; }.next-button { background: linear-gradient(105deg,#39ae89,#318d7a); box-shadow: 0 4px 0 #236d5f; }
+.side-stack { display: grid; gap: 12px; }.difficulty-card, .algorithm-card, .howto-card { padding: 16px; }.side-heading { margin-bottom: 11px; }.side-kicker { color: #aaa5b9; font: 800 8px "DM Mono", monospace; letter-spacing: .16em; }.side-heading h2 { margin: 3px 0 0; color: #302951; font-size: 15px; letter-spacing: -.04em; }.difficulty-options { display: grid; gap: 6px; }.difficulty-option { min-height: 54px; display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 9px; padding: 6px 9px; border: 1px solid #eeecf4; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; transition: border-color .16s, background .16s, transform .16s; }.difficulty-option:hover { transform: translateX(2px); border-color: #c8c0f6; }.difficulty-option.is-selected { border-color: #8678eb; background: #f5f3ff; box-shadow: inset 3px 0 #7666e8; }.difficulty-option:disabled { opacity: .52; cursor: not-allowed; transform: none; }.difficulty-symbol { width: 29px; height: 29px; display: grid; place-items: center; border-radius: 8px; font: 800 11px "DM Mono", monospace; }.easy-symbol { color: #338668; background: #dff6eb; }.mid-symbol { color: #b38122; background: #fff2d2; }.hard-symbol { color: #c65c69; background: #ffeaec; }.difficulty-option strong { display: block; color: #433d60; font-size: 11px; }.difficulty-option small { display: block; margin-top: 1px; color: #9b96aa; font-size: 9px; }.option-check { color: var(--purple); font-size: 13px; opacity: 0; }.difficulty-option.is-selected .option-check { opacity: 1; }.level-hint { margin: 9px 1px 0; color: #9994aa; font-size: 9px; }
+.algorithm-card { background: linear-gradient(145deg,#fff 50%,#f1fbf6); }.algorithm-chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 9px; border: 1px solid #cdeedc; border-radius: 7px; color: #328367; background: #effaf4; font-size: 11px; }.mini-bars { height: 15px; display: flex; align-items: end; gap: 2px; }.mini-bars i { width: 3px; border-radius: 2px; background: #52b990; }.mini-bars i:nth-child(1) { height: 6px; }.mini-bars i:nth-child(2) { height: 10px; }.mini-bars i:nth-child(3) { height: 14px; }.algorithm-card > p { margin: 9px 0 0; color: #77728c; font-size: 10px; line-height: 1.7; }.selection-result { padding-top: 9px; margin-top: 10px; border-top: 1px solid #e5f1ea; }.selection-result > span { color: #9691a5; font-size: 9px; }.selection-result > div { display: flex; align-items: baseline; gap: 5px; margin-top: 3px; }.selection-result strong { color: #387e68; font: 800 15px "DM Mono", monospace; }.selection-result small, .selection-result b { color: #9893a8; font-size: 9px; }.howto-card { display: flex; gap: 9px; align-items: start; border-color: #f0dca9; background: #fff9e9; }.howto-card .side-kicker { flex: 0 0 auto; padding-top: 2px; color: #bb9950; }.howto-card p { margin: 0; color: #80704e; font-size: 10px; line-height: 1.65; }.howto-card b { color: #695323; }
+.game-footer { display: flex; justify-content: space-between; gap: 10px; padding: 18px 2px 24px; color: #8a85a0; font-size: 9px; }.game-footer i { padding: 0 4px; color: #beb9cf; font-style: normal; }
+@keyframes aurora-drift { from { transform: translate3d(-1%,0,0) scale(1); } to { transform: translate3d(1.5%,1%,0) scale(1.04); } }
+@keyframes art-hover { 0%,100% { transform: translateY(-50%); } 50% { transform: translateY(calc(-50% - 5px)); } }
+@keyframes rise-in { from { transform: scaleY(.08); opacity: .25; } to { transform: scaleY(1); opacity: 1; } }
+@keyframes ping { 0%,100% { transform: scale(1); opacity: .75; } 50% { transform: scale(1.4); opacity: 1; } }
+@keyframes tile-pop { from { opacity: .3; transform: translateY(7px) scale(.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes wrong-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+@keyframes timer-alert { to { transform: scale(1.08); } }
+@media (max-width: 900px) { .hero-art { right: 116px; width: 260px; opacity: .48; }.hero-sticker { flex-basis: 96px; }.game-layout { grid-template-columns: minmax(0, 1.3fr) minmax(270px, .8fr); gap: 11px; }.play-card { padding: 17px; }.game-metrics { gap: 12px; } }
+@media (max-width: 700px) { .topbar { height: 58px; padding: 0 14px; }.edition-label { display: none; }.topbar-actions { gap: 6px; }.study-link { min-height: 36px; padding: 0 8px; font-size: 10px; }.game-download { min-height: 36px; padding: 0 8px; }.game-shell { width: calc(100% - 24px); }.hero { min-height: 235px; padding: 25px 20px; margin: 15px 0 12px; }.hero-art { right: 8px; top: 30%; width: 190px; opacity: .2; }.hero-sticker { position: absolute; right: 22px; bottom: 20px; flex-basis: auto; display: block; padding: 7px 9px; transform: rotate(2deg) scale(.88); transform-origin: bottom right; }.hero-sticker strong { display: none; }.hero-sticker > span:first-child { font-size: 8px; }.game-layout { grid-template-columns: 1fr; }.side-stack { grid-template-columns: 1fr; }.play-card { padding: 15px 13px; }.game-metrics { gap: 10px; }.metric { min-width: 39px; }.mission-prompt > strong { font-size: 12px; }.number-pool { gap: 7px; }.number-tile { flex: 1 0 50px; min-width: 0; height: 50px; padding: 0 8px; }.difficulty-options { grid-template-columns: repeat(3,1fr); }.difficulty-option { grid-template-columns: 1fr; justify-items: center; gap: 3px; padding: 8px 3px; text-align: center; }.difficulty-option > span:nth-child(2) { min-height: 35px; }.difficulty-option small { font-size: 8px; }.option-check { display: none; }.howto-card { order: 3; }.game-footer { font-size: 8px; } }
+@media (max-width: 390px) { .study-link { display: none; } }
+@media (max-width: 390px) { .brand { font-size: 13px; }.hero { min-height: 220px; }.hero-note { font-size: 9px; }.play-card-top { align-items: start; flex-direction: column; gap: 10px; }.game-metrics { width: 100%; justify-content: space-between; padding: 9px 10px; border-radius: 7px; background: #f7f5fc; }.metric strong { font-size: 18px; }.mission-prompt { gap: 6px; }.mission-prompt > strong { font-size: 11px; }.timer { min-width: 46px; font-size: 13px; }.answer-lane { gap: 4px; padding: 6px; }.sorted-tile { width: 38px; height: 39px; font-size: 12px; }.game-footer { flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; } }
+.algorithm-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.algorithm-option { min-height: 52px; display: flex; align-items: center; gap: 7px; padding: 6px; border: 1px solid #eeecf4; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; transition: transform .14s, border-color .14s, background .14s; }
+.algorithm-option:hover { transform: translateY(-2px); border-color: #c7c0f2; }
+.algorithm-option.is-selected { border-color: #8072e9; background: #f4f2ff; box-shadow: inset 3px 0 #7666e8; }
+.algorithm-option:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.algorithm-icon { width: 26px; height: 26px; flex: 0 0 26px; display: grid; place-items: center; border-radius: 7px; font: 800 10px "DM Mono", monospace; }
+.selection-icon { color: #318467; background: #dff6eb; }.bubble-icon { color: #b77c25; background: #fff0d2; }.insertion-icon { color: #c26073; background: #ffebee; }.quick-icon { color: #5d57bd; background: #e9e7ff; }
+.algorithm-option strong { display: block; color: #433d60; font-size: 10px; }.algorithm-option small { display: block; color: #9b96aa; font-size: 8px; white-space: nowrap; }
+.algorithm-description { min-height: 34px; }
+.operation-board { padding: 12px 0 0; }
+.operation-array { min-height: 70px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; padding: 12px 8px; border: 1px dashed #dad6e9; border-radius: 9px; background: linear-gradient(110deg,#fbfaff,#f6fcfa); }
+.array-token { position: relative; min-width: 48px; height: 47px; display: grid; place-items: center; padding: 0 7px; border: 1px solid #ddd9f4; border-radius: 8px; color: #352d61; background: #eeecff; font: 800 14px "DM Mono", monospace; }
+.array-token.is-left { border-color: #f1b849; background: #fff2d4; box-shadow: 0 0 0 2px #f1b84935; }.array-token.is-right { border-color: #58bd9a; background: #e4f8ef; box-shadow: 0 0 0 2px #58bd9a35; }.array-token.is-pivot { border-color: #8172e9; background: #e8e5ff; }.array-token.is-outside { opacity: .38; }
+.array-token.is-min { border-color: #f0be58; background: #fff3d8; }.array-token.is-check { border-color: #ed8d78; background: #ffede8; }.array-token.is-fixed { border-color: #61c49e; background: #e4f8ef; }.array-token.is-hole { border: 1px dashed #e58a61; color: #a66c52; background: #fff8f4; font: 700 9px "Noto Sans KR", sans-serif; }
+.array-token small { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); padding: 1px 4px; border-radius: 3px; color: #51459d; background: #eeecff; font: 700 7px "DM Mono", monospace; white-space: nowrap; }
+.operation-question { margin: 11px 0 8px; color: #514a6d; font-size: 11px; font-weight: 700; text-align: center; }
+.operation-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; }
+.choice-button { min-height: 42px; padding: 0 13px; border: 1px solid #dfdbee; border-radius: 7px; color: #514a6d; background: #fff; cursor: pointer; font-size: 11px; font-weight: 800; transition: transform .12s, border-color .12s, background .12s; }
+.choice-button:hover { transform: translateY(-2px); border-color: #9588ed; background: #f7f5ff; }
+.choice-button.is-position { min-width: 46px; color: #584bc0; background: #f1efff; }
+.insertion-key { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 6px; color: #b95868; background: #ffeaed; font-size: 10px; font-weight: 800; }
+.insertion-strip { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
+.insertion-gap { width: 26px; min-height: 39px; border: 1px dashed #a69beb; border-radius: 6px; color: #7568d6; background: #f8f7ff; cursor: pointer; font: 700 14px "DM Mono", monospace; transition: background .12s, transform .12s; }
+.insertion-gap:hover { transform: scale(1.08); background: #eae7ff; }
+@media (max-width: 700px) { .algorithm-option { min-height: 47px; }.algorithm-options { gap: 5px; }.array-token { min-width: 40px; height: 42px; font-size: 12px; }.insertion-gap { width: 21px; } }
+
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="숫자 구조대 처음으로">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>숫자 구조대</span>
+    </a>
+    <div class="topbar-actions">
+      <span class="edition-label"><span class="live-dot"></span> ALGORITHM ARCADE</span>
+    </div>
+  </header>
+
+  <main id="top" class="game-shell">
+    <section class="hero" aria-labelledby="game-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> SORT QUEST · NUMBER RESCUE</p>
+        <h1 id="game-title">숫자 줄서기<br><span>대작전!</span></h1>
+        <p class="hero-description">뒤죽박죽 숫자들 사이에서 가장 작은 수를 찾아요.<br>연속으로 성공해 최고 점수에 도전해 보세요.</p>
+        <div class="hero-note"><span class="note-star" aria-hidden="true">✦</span> 빠른 눈썰미와 정렬 감각이 필요해요</div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 360 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26 195H332" stroke="#9FA2FF" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>
+          <path d="M52 162C97 158 115 127 151 132C194 138 201 82 242 88C278 93 290 52 321 38" stroke="#FFD978" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 8"/>
+          <circle cx="52" cy="162" r="6" fill="#FFD978"/><circle cx="151" cy="132" r="6" fill="#FFD978"/><circle cx="242" cy="88" r="6" fill="#FFD978"/><circle cx="321" cy="38" r="6" fill="#FFD978"/>
+          <rect x="38" y="142" width="34" height="53" rx="10" fill="#F28B74"/>
+          <rect x="86" y="120" width="34" height="75" rx="10" fill="#FFA96B"/>
+          <rect x="134" y="103" width="34" height="92" rx="10" fill="#FFD36D"/>
+          <rect x="182" y="79" width="34" height="116" rx="10" fill="#78D6B3"/>
+          <rect x="230" y="58" width="34" height="137" rx="10" fill="#5CC6C7"/>
+          <rect x="278" y="33" width="34" height="162" rx="10" fill="#8C8BFF"/>
+          <path d="m315 35 12-3-4 12" stroke="#FFD978" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="43" cy="48" r="4" fill="#F28B74"/><circle cx="84" cy="31" r="3" fill="#78D6B3"/><circle cx="304" cy="218" r="4" fill="#FFD978"/>
+        </svg>
+        <span class="art-caption">FIND THE ORDER</span>
+      </div>
+      <div class="hero-sticker"><span>오늘의 미션</span><strong>작은 수부터<br>구출하기</strong><span class="sticker-spark" aria-hidden="true">✳</span></div>
+    </section>
+
+    <section class="game-layout" aria-label="숫자 정렬 게임">
+      <article class="play-card">
+        <div class="play-card-top">
+          <div class="round-label"><span>ROUND</span><strong id="round-number">준비</strong></div>
+          <div class="game-metrics" aria-label="현재 게임 기록">
+            <div class="metric"><span>점수</span><strong id="score">0</strong></div>
+            <div class="metric"><span>콤보</span><strong><span id="combo">0</span><small>연속</small></strong></div>
+            <div class="metric lives-metric"><span>기회</span><strong><span id="lives">3</span><small>/ 3</small></strong></div>
+          </div>
+        </div>
+        <div class="round-progress" aria-label="라운드 진행률"><span id="round-progress-fill"></span></div>
+
+        <div class="mission-prompt">
+          <span class="prompt-tag">MISSION</span>
+          <strong id="mission-instruction">난이도를 고르고 게임을 시작하세요!</strong>
+          <span id="timer" class="timer">--:--</span>
+        </div>
+        <div class="timer-track"><span id="timer-fill"></span></div>
+
+        <div id="selection-board">
+          <div class="sort-lane-wrap">
+            <div class="lane-heading"><span>정렬 완료</span><span id="sorted-count">0 / 0</span></div>
+            <div id="sorted-lane" class="sorted-lane" aria-label="정렬된 숫자"></div>
+          </div>
+          <div class="tile-pool-wrap">
+            <div class="lane-heading"><span>숫자 더미 <small>가장 작은 수를 눌러요</small></span><span class="tap-hint">TAP A TILE</span></div>
+            <div id="number-pool" class="number-pool" role="group" aria-label="정렬할 숫자 선택"></div>
+          </div>
+        </div>
+        <div id="operation-board" class="operation-board" hidden>
+          <div class="lane-heading"><span id="operation-label">알고리즘 행동</span><span id="operation-counter"></span></div>
+          <div id="operation-array" class="operation-array"></div>
+          <p id="operation-question" class="operation-question"></p>
+          <div id="operation-choices" class="operation-choices"></div>
+        </div>
+
+        <p id="game-message" class="game-message" role="status" aria-live="polite">숫자를 오름차순으로 정리하면 미션 성공!</p>
+        <div class="game-actions">
+          <button id="start-button" class="primary-button" type="button"><span>게임 시작</span><span aria-hidden="true">→</span></button>
+          <button id="restart-button" class="secondary-button" type="button" hidden>이번 판 다시하기</button>
+          <button id="next-button" class="primary-button next-button" type="button" hidden><span>다음 라운드</span><span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+
+      <aside class="side-stack">
+        <section class="difficulty-card">
+          <div class="side-heading"><span class="side-kicker">CHOOSE YOUR LEVEL</span><h2>도전 난이도</h2></div>
+          <div class="difficulty-options" role="group" aria-label="게임 난이도">
+            <button class="difficulty-option is-selected" type="button" data-count="5" data-time="55" aria-pressed="true"><span class="difficulty-symbol easy-symbol">A</span><span><strong>가볍게</strong><small>숫자 5개 · 여유롭게</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="7" data-time="48" aria-pressed="false"><span class="difficulty-symbol mid-symbol">B</span><span><strong>집중 모드</strong><small>숫자 7개 · 콤보 도전</small></span><span class="option-check">✓</span></button>
+            <button class="difficulty-option" type="button" data-count="9" data-time="42" aria-pressed="false"><span class="difficulty-symbol hard-symbol">C</span><span><strong>스피드 모드</strong><small>숫자 9개 · 시간 제한</small></span><span class="option-check">✓</span></button>
+          </div>
+          <p class="level-hint">라운드가 올라갈수록 숫자가 하나씩 늘어요.</p>
+        </section>
+
+        <section class="algorithm-card">
+          <div class="side-heading"><span class="side-kicker">PICK YOUR ALGORITHM</span><h2>알고리즘 고르기</h2></div>
+          <div class="algorithm-options" role="group" aria-label="게임할 정렬 알고리즘">
+            <button class="algorithm-option is-selected" type="button" data-algorithm="selection" aria-pressed="true"><span class="algorithm-icon selection-icon">S</span><span><strong>선택</strong><small>최솟값 찾기</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="bubble" aria-pressed="false"><span class="algorithm-icon bubble-icon">B</span><span><strong>버블</strong><small>이웃 비교</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="insertion" aria-pressed="false"><span class="algorithm-icon insertion-icon">I</span><span><strong>삽입</strong><small>자리 끼우기</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="quick" aria-pressed="false"><span class="algorithm-icon quick-icon">Q</span><span><strong>퀵</strong><small>Pivot 분할</small></span></button>
+          </div>
+          <p id="algorithm-description" class="algorithm-description">남은 숫자 중 가장 작은 값을 골라 앞에서부터 확정해요.</p>
+          <div id="algorithm-result" class="selection-result" hidden>
+            <span id="result-heading">이번 배열 실행 통계</span>
+            <div><strong id="result-comparisons">0</strong><small>비교</small><b>·</b><strong id="result-movements">0</strong><small id="result-movement-label">교환</small></div>
+          </div>
+        </section>
+
+        <section class="howto-card">
+          <span class="side-kicker">HOW TO PLAY</span>
+          <p><b>가장 작은 숫자를 탭!</b><br>틀려도 괜찮아요. 숫자를 다시 비교해 다음 수를 찾아보세요.</p>
+        </section>
+      </aside>
+    </section>
+
+    <footer class="game-footer"><span>눈썰미가 레벨업 중!</span><span>숫자 구조대 <i>·</i> 알고리즘 아케이드</span></footer>
+  </main>
+  <script>
+const algorithms = {
+  selection: { name: "선택 정렬", metric: "교환", description: "남은 구간에서 가장 작은 값을 골라 앞에 놓아요." },
+  bubble: { name: "버블 정렬", metric: "교환", description: "이웃한 두 값을 비교하고, 큰 값을 오른쪽으로 보내요." },
+  insertion: { name: "삽입 정렬", metric: "이동", description: "정렬된 구간에 다음 숫자가 들어갈 자리를 찾아요." },
+  quick: { name: "퀵 정렬", metric: "교환", description: "Pivot을 기준으로 나눈 뒤, Pivot의 자리를 찾아요." }
+};
+
+const ui = {
+  round: document.querySelector("#round-number"), score: document.querySelector("#score"), combo: document.querySelector("#combo"), lives: document.querySelector("#lives"),
+  progress: document.querySelector("#round-progress-fill"), instruction: document.querySelector("#mission-instruction"), timer: document.querySelector("#timer"), timerFill: document.querySelector("#timer-fill"),
+  selectionBoard: document.querySelector("#selection-board"), lane: document.querySelector("#sorted-lane"), sortedCount: document.querySelector("#sorted-count"), pool: document.querySelector("#number-pool"),
+  operationBoard: document.querySelector("#operation-board"), operationLabel: document.querySelector("#operation-label"), operationCounter: document.querySelector("#operation-counter"), operationArray: document.querySelector("#operation-array"), operationQuestion: document.querySelector("#operation-question"), operationChoices: document.querySelector("#operation-choices"),
+  message: document.querySelector("#game-message"), start: document.querySelector("#start-button"), restart: document.querySelector("#restart-button"), next: document.querySelector("#next-button"),
+  difficulty: [...document.querySelectorAll(".difficulty-option")], algorithmOptions: [...document.querySelectorAll(".algorithm-option")], algorithmDescription: document.querySelector("#algorithm-description"),
+  result: document.querySelector("#algorithm-result"), resultHeading: document.querySelector("#result-heading"), resultComparisons: document.querySelector("#result-comparisons"), resultMovements: document.querySelector("#result-movements"), resultMovementLabel: document.querySelector("#result-movement-label")
+};
+
+let algorithm = "selection";
+let baseCount = 5;
+let baseTime = 55;
+let roundNumber = 0;
+let roundCount = 5;
+let score = 0;
+let combo = 0;
+let lives = 3;
+let remaining = 0;
+let duration = 0;
+let timerId = null;
+let startingArray = [];
+let currentArray = [];
+let targetArray = [];
+let selectionPool = [];
+let answer = [];
+let running = false;
+let finished = false;
+let roundStats = { comparisons: 0, movements: 0 };
+let bubbleActions = [];
+let bubbleStep = 0;
+let insertionIndex = 1;
+let insertionKey = null;
+let insertionCursor = -1;
+let selectionStart = 0;
+let selectionCursor = 1;
+let selectionMin = 0;
+let selectionFixed = new Set();
+let insertionHeld = false;
+let quickRanges = [];
+let quickPartitionState = null;
+let quickPhase = "left";
+let quickLeft = 0;
+let quickRight = 0;
+let quickPartitions = 0;
+let quickFixed = new Set();
+
+function stopTimer() {
+  if (timerId !== null) window.clearInterval(timerId);
+  timerId = null;
+}
+
+function updateTimer() {
+  ui.timer.textContent = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
+  ui.timerFill.style.width = `${duration ? remaining / duration * 100 : 0}%`;
+  const low = remaining <= 10;
+  ui.timer.classList.toggle("is-low", low);
+  ui.timerFill.classList.toggle("is-low", low);
+}
+
+function updateProgress() {
+  const done = roundStats.comparisons + roundStats.movements;
+  const expected = roundNumber ? calculateStats(startingArray) : { comparisons: 0, movements: 0 };
+  const total = expected.comparisons + expected.movements;
+  ui.progress.style.width = `${total ? Math.min(100, done / total * 100) : 0}%`;
+  ui.sortedCount.textContent = `${done} / ${total}`;
+}
+
+function updateScoreboard() {
+  ui.score.textContent = String(score);
+  ui.combo.textContent = String(combo);
+  ui.lives.textContent = String(lives);
+  updateProgress();
+}
+
+function shuffle(items) {
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
+function makeNumbers(count) {
+  const values = new Set();
+  while (values.size < count) values.add(Math.floor(Math.random() * 90) + 10);
+  return [...values];
+}
+
+function selectionStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let start = 0; start < array.length - 1; start += 1) {
+    let min = start;
+    for (let i = start + 1; i < array.length; i += 1) {
+      comparisons += 1;
+      if (array[i] < array[min]) min = i;
+    }
+    if (min !== start) {
+      [array[start], array[min]] = [array[min], array[start]];
+      movements += 1;
+    }
+  }
+  return { comparisons, movements };
+}
+
+function makeBubbleActions(values) {
+  const array = [...values];
+  const actions = [];
+  for (let end = array.length - 1; end > 0; end -= 1) {
+    let changed = false;
+    for (let left = 0; left < end; left += 1) {
+      const swap = array[left] > array[left + 1];
+      actions.push({ left, right: left + 1, swap });
+      if (swap) {
+        [array[left], array[left + 1]] = [array[left + 1], array[left]];
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
+  return actions;
+}
+
+function bubbleStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let end = array.length - 1; end > 0; end -= 1) {
+    let changed = false;
+    for (let left = 0; left < end; left += 1) {
+      comparisons += 1;
+      if (array[left] > array[left + 1]) {
+        [array[left], array[left + 1]] = [array[left + 1], array[left]];
+        movements += 1;
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
+  return { comparisons, movements };
+}
+
+function insertionStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let i = 1; i < array.length; i += 1) {
+    const key = array[i];
+    let j = i - 1;
+    while (j >= 0) {
+      comparisons += 1;
+      if (array[j] <= key) break;
+      array[j + 1] = array[j];
+      movements += 1;
+      j -= 1;
+    }
+    array[j + 1] = key;
+  }
+  return { comparisons, movements };
+}
+
+function quickPartition(array, low, high) {
+  const next = [...array];
+  const pivot = next[low];
+  let left = low + 1;
+  let right = high;
+  let comparisons = 0;
+  let movements = 0;
+  while (true) {
+    while (left <= high) {
+      comparisons += 1;
+      if (!(next[left] <= pivot)) break;
+      left += 1;
+    }
+    while (right > low) {
+      comparisons += 1;
+      if (!(next[right] > pivot)) break;
+      right -= 1;
+    }
+    if (left >= right) break;
+    [next[left], next[right]] = [next[right], next[left]];
+    movements += 1;
+    left += 1;
+    right -= 1;
+  }
+  if (right !== low) {
+    [next[low], next[right]] = [next[right], next[low]];
+    movements += 1;
+  }
+  return { array: next, pivot, pivotIndex: right, low, high, left, right, comparisons, movements };
+}
+
+function quickStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  function sort(low, high) {
+    if (low >= high) return;
+    const part = quickPartition(array, low, high);
+    array.splice(0, array.length, ...part.array);
+    comparisons += part.comparisons;
+    movements += part.movements;
+    sort(low, part.pivotIndex - 1);
+    sort(part.pivotIndex + 1, high);
+  }
+  sort(0, array.length - 1);
+  return { comparisons, movements };
+}
+
+function calculateStats(values) {
+  if (algorithm === "bubble") return bubbleStats(values);
+  if (algorithm === "selection") return selectionStats(values);
+  if (algorithm === "insertion") return insertionStats(values);
+  return quickStats(values);
+}
+
+function renderSelectionPool() {
+  ui.pool.replaceChildren();
+  selectionPool.forEach(tile => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "number-tile";
+    button.textContent = String(tile.value);
+    button.setAttribute("aria-label", `${tile.value} 선택`);
+    button.addEventListener("click", () => chooseMinimum(tile.id));
+    ui.pool.append(button);
+  });
+}
+
+function renderSortedLane() {
+  ui.lane.replaceChildren();
+  if (!answer.length) {
+    const hint = document.createElement("p");
+    hint.className = "lane-placeholder";
+    hint.textContent = "정렬한 숫자가 여기에 쌓여요";
+    ui.lane.append(hint);
+    return;
+  }
+  answer.forEach((value, index) => {
+    const tile = document.createElement("span");
+    tile.className = "sorted-tile";
+    tile.style.animationDelay = `${index * 35}ms`;
+    tile.textContent = String(value);
+    ui.lane.append(tile);
+  });
+}
+
+function drawOperationArray(values, markers = {}) {
+  ui.operationArray.replaceChildren();
+  if (markers.keyValue !== undefined) {
+    const held = document.createElement("span");
+    held.className = "insertion-key";
+    held.textContent = `삽입값 ${markers.keyValue}`;
+    ui.operationArray.append(held);
+  }
+  values.forEach((value, index) => {
+    const tile = document.createElement("span");
+    tile.className = "array-token";
+    if (value === null) tile.classList.add("is-hole");
+    if (markers.left === index) tile.classList.add("is-left");
+    if (markers.right === index) tile.classList.add("is-right");
+    if (markers.min === index) tile.classList.add("is-min");
+    if (markers.check === index) tile.classList.add("is-check");
+    if (markers.pivot === index) tile.classList.add("is-pivot");
+    if (markers.low !== undefined && (index < markers.low || index > markers.high)) tile.classList.add("is-outside");
+    if (markers.fixed?.has(index)) tile.classList.add("is-fixed");
+    tile.textContent = value === null ? "빈 칸" : String(value);
+    const labels = [];
+    if (markers.pivot === index) labels.push("Pivot");
+    if (markers.left === index) labels.push("L");
+    if (markers.right === index) labels.push("R");
+    if (markers.min === index) labels.push("최솟값 후보");
+    if (markers.check === index) labels.push("비교값");
+    if (markers.fixed?.has(index)) labels.push("확정");
+    if (labels.length) {
+      const badge = document.createElement("small");
+      badge.textContent = labels.join(" · ");
+      tile.append(badge);
+    }
+    ui.operationArray.append(tile);
+  });
+  ui.operationArray.setAttribute("aria-label", `현재 숫자 ${values.join(", ")}`);
+}
+
+function renderBubbleAction() {
+  const action = bubbleActions[bubbleStep];
+  if (!action) { finishRound(); return; }
+  ui.operationLabel.textContent = "이웃한 두 수 비교";
+  ui.operationCounter.textContent = `${bubbleStep + 1} / ${bubbleActions.length}`;
+  drawOperationArray(currentArray, { left: action.left, right: action.right });
+  const left = currentArray[action.left];
+  const right = currentArray[action.right];
+  ui.operationQuestion.textContent = `${left}과 ${right}, 자리를 바꿔야 할까요?`;
+  ui.operationChoices.replaceChildren();
+  addChoice("자리 바꾸기", () => chooseBubble(true));
+  addChoice("그대로 두기", () => chooseBubble(false));
+  ui.instruction.textContent = "큰 수가 오른쪽으로 가도록 이웃한 수를 살펴봐요.";
+  updateProgress();
+}
+
+function insertionDestination(array, index) {
+  const key = array[index];
+  let position = 0;
+  while (position < index && array[position] < key) position += 1;
+  let comparisons = 0;
+  let movements = 0;
+  for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+    comparisons += 1;
+    if (array[cursor] <= key) break;
+    movements += 1;
+  }
+  return { key, position, comparisons, movements };
+}
+
+function renderInsertionAction() {
+  if (insertionIndex >= roundCount) { finishRound(); return; }
+  const { key, position } = insertionDestination(currentArray, insertionIndex);
+  ui.operationLabel.textContent = "삽입할 자리 찾기";
+  ui.operationCounter.textContent = `${insertionIndex} / ${roundCount - 1}`;
+  ui.operationArray.replaceChildren();
+  const keyBadge = document.createElement("span");
+  keyBadge.className = "insertion-key";
+  keyBadge.textContent = `삽입값 ${key}`;
+  ui.operationArray.append(keyBadge);
+  const strip = document.createElement("div");
+  strip.className = "insertion-strip";
+  const prefix = currentArray.slice(0, insertionIndex);
+  for (let slot = 0; slot <= prefix.length; slot += 1) {
+    const gap = document.createElement("button");
+    gap.type = "button";
+    gap.className = "insertion-gap";
+    gap.textContent = "+";
+    gap.setAttribute("aria-label", `${key}을(를) 정렬된 구간의 ${slot + 1}번째 자리에 삽입`);
+    gap.addEventListener("click", () => chooseInsertion(slot, position));
+    strip.append(gap);
+    if (slot < prefix.length) {
+      const token = document.createElement("span");
+      token.className = "array-token";
+      token.textContent = String(prefix[slot]);
+      strip.append(token);
+    }
+  }
+  if (insertionIndex + 1 < roundCount) {
+    const rest = document.createElement("span");
+    rest.className = "insertion-rest";
+    rest.textContent = `다음: ${currentArray.slice(insertionIndex + 1).join(" · ")}`;
+    strip.append(rest);
+  }
+  ui.operationArray.append(strip);
+  ui.operationArray.setAttribute("aria-label", `정렬된 구간 ${prefix.join(", ")}, 삽입값 ${key}`);
+  ui.operationQuestion.textContent = `${key}은(는) 정렬된 구간의 어느 위치에 들어갈까요?`;
+  ui.operationChoices.replaceChildren();
+  ui.instruction.textContent = "이미 정렬된 숫자들 사이에서 알맞은 자리를 찾아요.";
+  updateProgress();
+}
+
+function renderQuickAction() {
+  while (quickRanges.length) {
+    const [low, high] = quickRanges.shift();
+    if (low < high) {
+      quickPartitionState = quickPartition(currentArray, low, high);
+      ui.operationLabel.textContent = "Pivot 자리 예측";
+      ui.operationCounter.textContent = `구간 ${low + 1}–${high + 1}`;
+      drawOperationArray(currentArray, { low, high, pivot: low, left: low + 1, right: high, fixed: quickFixed });
+      ui.operationQuestion.textContent = `Pivot ${quickPartitionState.pivot}은(는) 분할이 끝나면 몇 번째 자리에 놓일까요?`;
+      ui.operationChoices.replaceChildren();
+      for (let index = low; index <= high; index += 1) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice-button is-position";
+        button.textContent = `${index + 1}번`;
+        button.setAttribute("aria-label", `Pivot을 ${index + 1}번째 자리에 놓기`);
+        button.addEventListener("click", () => chooseQuickPivot(index));
+        ui.operationChoices.append(button);
+      }
+      ui.instruction.textContent = "왼쪽은 Pivot 이하, 오른쪽은 Pivot보다 큰 수가 오도록 생각해요.";
+      updateProgress();
+      return;
+    }
+    if (low === high) quickFixed.add(low);
+  }
+  finishRound();
+}
+
+function renderOperation() {
+  ui.selectionBoard.hidden = algorithm !== "selection";
+  ui.operationBoard.hidden = algorithm === "selection";
+  if (algorithm === "bubble") renderBubbleAction();
+  if (algorithm === "insertion") renderInsertionAction();
+  if (algorithm === "quick") renderQuickAction();
+}
+
+function addChoice(label, callback) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "choice-button";
+  button.textContent = label;
+  button.addEventListener("click", callback);
+  ui.operationChoices.append(button);
+}
+
+function awardCorrect() {
+  combo += 1;
+  score += 10 + Math.min((combo - 1) * 2, 10);
+  ui.message.className = "game-message is-good";
+  updateScoreboard();
+}
+
+function markWrong(button, text) {
+  lives -= 1;
+  combo = 0;
+  updateScoreboard();
+  if (button) {
+    button.classList.remove("is-wrong");
+    void button.offsetWidth;
+    button.classList.add("is-wrong");
+  }
+  ui.message.className = "game-message is-wrong";
+  ui.message.textContent = text;
+  if (lives <= 0) endGame("기회를 모두 사용했어요.");
+}
+
+function chooseMinimum(id) {
+  if (!running) return;
+  const tileIndex = selectionPool.findIndex(tile => tile.id === id);
+  if (tileIndex < 0) return;
+  const tile = selectionPool[tileIndex];
+  const expected = targetArray[answer.length];
+  if (tile.value !== expected) {
+    markWrong(ui.pool.querySelector(`[aria-label="${tile.value} 선택"]`), `아쉬워요. 지금 찾는 수는 ${tile.value}보다 작아요.`);
+    return;
+  }
+  selectionPool.splice(tileIndex, 1);
+  answer.push(tile.value);
+  awardCorrect();
+  renderSelectionPool();
+  renderSortedLane();
+  if (answer.length === roundCount) finishRound();
+  else ui.message.textContent = `${tile.value} 정답! 남은 숫자 중 가장 작은 수를 찾아요.`;
+}
+
+function chooseBubble(chooseSwap) {
+  if (!running) return;
+  const action = bubbleActions[bubbleStep];
+  if (!action) return;
+  if (chooseSwap !== action.swap) {
+    const left = currentArray[action.left];
+    const right = currentArray[action.right];
+    markWrong(null, action.swap ? `${left}이(가) 더 커요. 큰 수를 오른쪽으로 보내야 해요.` : `${left}이(가) 이미 더 작아요. 이번에는 그대로 두세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (action.swap) {
+    [currentArray[action.left], currentArray[action.right]] = [currentArray[action.right], currentArray[action.left]];
+    roundStats.movements += 1;
+  }
+  bubbleStep += 1;
+  awardCorrect();
+  if (bubbleStep >= bubbleActions.length) finishRound();
+  else renderBubbleAction();
+}
+
+function chooseInsertion(slot, correctSlot) {
+  if (!running) return;
+  if (slot !== correctSlot) {
+    markWrong(null, "삽입값보다 작은 수는 앞에, 큰 수는 뒤에 오도록 자리를 찾아보세요.");
+    return;
+  }
+  const { key, comparisons, movements } = insertionDestination(currentArray, insertionIndex);
+  const prefix = currentArray.slice(0, insertionIndex);
+  prefix.splice(slot, 0, key);
+  currentArray = [...prefix, ...currentArray.slice(insertionIndex + 1)];
+  roundStats.comparisons += comparisons;
+  roundStats.movements += movements;
+  insertionIndex += 1;
+  awardCorrect();
+  if (insertionIndex >= roundCount) finishRound();
+  else renderInsertionAction();
+}
+
+function chooseQuickPivot(index) {
+  if (!running || !quickPartitionState) return;
+  const part = quickPartitionState;
+  if (index !== part.pivotIndex) {
+    markWrong(null, `Pivot ${part.pivot}은(는) ${part.pivotIndex + 1}번째 자리에 놓여요. 포인터가 교차하는 위치를 다시 살펴보세요.`);
+    return;
+  }
+  currentArray = part.array;
+  quickFixed.add(part.pivotIndex);
+  roundStats.comparisons += part.comparisons;
+  roundStats.movements += part.movements;
+  quickPartitions += 1;
+  quickRanges.unshift([part.pivotIndex + 1, part.high]);
+  quickRanges.unshift([part.low, part.pivotIndex - 1]);
+  quickPartitionState = null;
+  awardCorrect();
+  renderQuickAction();
+}
+
+function setAlgorithm(nextAlgorithm) {
+  if (running) return;
+  algorithm = nextAlgorithm;
+  ui.algorithmOptions.forEach(button => {
+    const selected = button.dataset.algorithm === algorithm;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+  ui.algorithmDescription.textContent = algorithms[algorithm].description;
+  if (roundNumber > 0) resetToReady();
+  else {
+    ui.selectionBoard.hidden = algorithm !== "selection";
+    ui.operationBoard.hidden = algorithm === "selection";
+    ui.instruction.textContent = "난이도를 고르고 게임을 시작하세요!";
+  }
+}
+
+function selectDifficulty(button) {
+  if (running) return;
+  baseCount = Number(button.dataset.count);
+  baseTime = Number(button.dataset.time);
+  ui.difficulty.forEach(option => {
+    const selected = option === button;
+    option.classList.toggle("is-selected", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  });
+  if (roundNumber > 0) resetToReady();
+}
+
+function resetToReady() {
+  stopTimer();
+  running = false;
+  finished = false;
+  roundNumber = 0;
+  score = 0;
+  combo = 0;
+  lives = 3;
+  startingArray = [];
+  currentArray = [];
+  targetArray = [];
+  selectionPool = [];
+  answer = [];
+  roundStats = { comparisons: 0, movements: 0 };
+  ui.round.textContent = "준비";
+  ui.instruction.textContent = "난이도를 고르고 게임을 시작하세요!";
+  ui.message.className = "game-message";
+  ui.message.textContent = "알고리즘을 고르고 숫자 줄서기 미션에 도전해요!";
+  ui.timer.textContent = "--:--";
+  ui.timer.classList.remove("is-low");
+  ui.timerFill.style.width = "100%";
+  ui.timerFill.classList.remove("is-low");
+  ui.progress.style.width = "0%";
+  ui.sortedCount.textContent = "0 / 0";
+  ui.pool.replaceChildren();
+  ui.lane.replaceChildren();
+  ui.operationArray.replaceChildren();
+  ui.operationChoices.replaceChildren();
+  ui.result.hidden = true;
+  ui.start.hidden = false;
+  ui.restart.hidden = true;
+  ui.next.hidden = true;
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+  ui.selectionBoard.hidden = algorithm !== "selection";
+  ui.operationBoard.hidden = algorithm === "selection";
+  updateScoreboard();
+}
+
+function startJourney() {
+  score = 0;
+  combo = 0;
+  roundNumber = 1;
+  startRound();
+}
+
+function startRound() {
+  stopTimer();
+  roundCount = Math.min(15, baseCount + Math.max(0, roundNumber - 1));
+  lives = 3;
+  combo = 0;
+  running = true;
+  finished = false;
+  startingArray = makeNumbers(roundCount);
+  currentArray = [...startingArray];
+  targetArray = [...startingArray].sort((a, b) => a - b);
+  answer = [];
+  roundStats = { comparisons: 0, movements: 0 };
+  bubbleActions = [];
+  bubbleStep = 0;
+  insertionIndex = 1;
+  insertionKey = null;
+  insertionCursor = -1;
+  insertionHeld = false;
+  selectionStart = 0;
+  selectionCursor = 1;
+  selectionMin = 0;
+  selectionFixed = new Set();
+  quickRanges = [];
+  quickPartitionState = null;
+  quickPhase = "left";
+  quickLeft = 0;
+  quickRight = 0;
+  quickPartitions = 0;
+  quickFixed = new Set();
+
+  ui.round.textContent = String(roundNumber).padStart(2, "0");
+  ui.message.className = "game-message";
+  ui.result.hidden = true;
+  ui.start.hidden = true;
+  ui.restart.hidden = false;
+  ui.restart.textContent = "이번 판 다시하기";
+  ui.next.hidden = true;
+  ui.difficulty.forEach(button => { button.disabled = true; });
+  ui.algorithmOptions.forEach(button => { button.disabled = true; });
+  ui.selectionBoard.hidden = true;
+  ui.operationBoard.hidden = false;
+
+  if (algorithm === "selection") {
+    ui.instruction.textContent = "현재 최솟값 후보와 새 값을 비교해요.";
+    renderSelectionAction();
+  } else if (algorithm === "bubble") {
+    bubbleActions = makeBubbleActions(startingArray);
+    ui.instruction.textContent = "이웃한 두 수를 비교해 맞는 행동을 골라요.";
+    renderBubbleAction();
+  } else if (algorithm === "insertion") {
+    ui.instruction.textContent = "앞의 숫자와 삽입값을 비교해 이동 여부를 정해요.";
+    prepareInsertionStep();
+  } else {
+    quickRanges = [[0, roundCount - 1]];
+    ui.instruction.textContent = "좌우 포인터가 확인한 값의 이동 여부를 정해요.";
+    renderQuickAction();
+  }
+  const expected = calculateStats(startingArray);
+  const steps = expected.comparisons + expected.movements;
+  const secondsPerStep = algorithm === "bubble" || algorithm === "quick" ? .75 : 1.1;
+  duration = Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12));
+  remaining = duration;
+  updateScoreboard();
+  updateTimer();
+  timerId = window.setInterval(() => {
+    remaining -= 1;
+    updateTimer();
+    if (remaining <= 0) endGame("시간이 다 됐어요. 다음 도전에서 다시 줄을 세워봐요!");
+  }, 1000);
+}
+
+function endGame(message) {
+  stopTimer();
+  running = false;
+  finished = true;
+  ui.instruction.textContent = "미션 종료";
+  ui.message.className = "game-message is-wrong";
+  ui.message.textContent = `${message} 현재 점수 ${score}점.`;
+  ui.restart.hidden = false;
+  ui.restart.textContent = "다시 도전하기";
+  ui.next.hidden = true;
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+}
+
+function finishRound() {
+  stopTimer();
+  running = false;
+  finished = true;
+  const stats = calculateStats(startingArray);
+  const bonus = roundCount * 5 + remaining * 2;
+  score += bonus;
+  ui.score.textContent = String(score);
+  ui.instruction.textContent = "완벽해요! 숫자들이 줄을 섰어요.";
+  ui.message.className = "game-message is-win";
+  ui.message.textContent = `라운드 통과! 정리 보너스 +${bonus}점 · 다음 라운드에서 숫자가 하나 더 늘어요.`;
+  ui.restart.hidden = false;
+  ui.restart.textContent = "처음부터 다시";
+  ui.next.hidden = false;
+  ui.result.hidden = false;
+  ui.resultHeading.textContent = `이번 배열 ${algorithms[algorithm].name} 통계`;
+  ui.resultComparisons.textContent = String(stats.comparisons);
+  ui.resultMovements.textContent = String(stats.movements);
+  ui.resultMovementLabel.textContent = algorithms[algorithm].metric;
+  ui.operationChoices.replaceChildren();
+  ui.operationCounter.textContent = "완료";
+  ui.operationQuestion.textContent = "모든 숫자가 오름차순으로 정렬됐어요!";
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+  if (algorithm === "selection") {
+    drawOperationArray(currentArray, { fixed: selectionFixed });
+  } else drawOperationArray(currentArray, algorithm === "quick" ? { fixed: quickFixed } : {});
+}
+
+function renderSelectionPool() {
+  ui.pool.replaceChildren();
+  selectionPool.forEach(tile => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "number-tile";
+    button.textContent = String(tile.value);
+    button.setAttribute("aria-label", `${tile.value} 선택`);
+    button.addEventListener("click", () => chooseMinimum(tile.id));
+    ui.pool.append(button);
+  });
+}
+
+function renderSortedLane() {
+  ui.lane.replaceChildren();
+  if (!answer.length) {
+    const hint = document.createElement("p");
+    hint.className = "lane-placeholder";
+    hint.textContent = "정렬한 숫자가 여기에 쌓여요";
+    ui.lane.append(hint);
+    return;
+  }
+  answer.forEach((value, index) => {
+    const tile = document.createElement("span");
+    tile.className = "sorted-tile";
+    tile.style.animationDelay = `${index * 35}ms`;
+    tile.textContent = String(value);
+    ui.lane.append(tile);
+  });
+}
+
+function drawOperationArray(values, markers = {}) {
+  ui.operationArray.replaceChildren();
+  if (markers.keyValue !== undefined) {
+    const held = document.createElement("span");
+    held.className = "insertion-key";
+    held.textContent = `삽입값 ${markers.keyValue}`;
+    ui.operationArray.append(held);
+  }
+  values.forEach((value, index) => {
+    const tile = document.createElement("span");
+    tile.className = "array-token";
+    if (value === null) tile.classList.add("is-hole");
+    if (markers.left === index) tile.classList.add("is-left");
+    if (markers.right === index) tile.classList.add("is-right");
+    if (markers.min === index) tile.classList.add("is-min");
+    if (markers.check === index) tile.classList.add("is-check");
+    if (markers.pivot === index) tile.classList.add("is-pivot");
+    if (markers.low !== undefined && (index < markers.low || index > markers.high)) tile.classList.add("is-outside");
+    if (markers.fixed?.has(index)) tile.classList.add("is-fixed");
+    tile.textContent = value === null ? "빈 칸" : String(value);
+    const labels = [];
+    if (markers.pivot === index) labels.push("Pivot");
+    if (markers.left === index) labels.push("L");
+    if (markers.right === index) labels.push("R");
+    if (markers.min === index) labels.push("최솟값 후보");
+    if (markers.check === index) labels.push("비교값");
+    if (markers.fixed?.has(index)) labels.push("확정");
+    if (labels.length) {
+      const badge = document.createElement("small");
+      badge.textContent = labels.join(" · ");
+      tile.append(badge);
+    }
+    ui.operationArray.append(tile);
+  });
+  ui.operationArray.setAttribute("aria-label", `현재 숫자 ${values.join(", ")}`);
+}
+
+function renderBubbleAction() {
+  const action = bubbleActions[bubbleStep];
+  if (!action) { finishRound(); return; }
+  ui.operationLabel.textContent = "이웃한 두 수 비교";
+  ui.operationCounter.textContent = `${bubbleStep + 1} / ${bubbleActions.length}`;
+  drawOperationArray(currentArray, { left: action.left, right: action.right });
+  const left = currentArray[action.left];
+  const right = currentArray[action.right];
+  ui.operationQuestion.textContent = `${left}과 ${right}, 자리를 바꿔야 할까요?`;
+  ui.operationChoices.replaceChildren();
+  addChoice("자리 바꾸기", () => chooseBubble(true));
+  addChoice("그대로 두기", () => chooseBubble(false));
+  updateProgress();
+}
+
+function renderInsertionAction() {
+  if (!insertionHeld) { prepareInsertionStep(); return; }
+  ui.operationLabel.textContent = "정렬된 구간에 삽입";
+  ui.operationCounter.textContent = `${insertionIndex} / ${roundCount - 1}`;
+  drawOperationArray(currentArray, { left: insertionCursor, keyValue: insertionKey });
+  ui.operationChoices.replaceChildren();
+  if (insertionCursor < 0) {
+    ui.operationQuestion.textContent = `빈 칸에 삽입값 ${insertionKey}을(를) 놓아주세요.`;
+    addChoice("빈 칸에 삽입", placeInsertionKey);
+  } else {
+    const compared = currentArray[insertionCursor];
+    ui.operationQuestion.textContent = `${compared} > ${insertionKey} ? 오른쪽으로 이동할까요?`;
+    addChoice("오른쪽으로 이동", () => chooseInsertion(true));
+    addChoice("그대로 두기", () => chooseInsertion(false));
+  }
+  updateProgress();
+}
+
+function prepareInsertionStep() {
+  if (insertionIndex >= roundCount) { finishRound(); return; }
+  insertionKey = currentArray[insertionIndex];
+  currentArray[insertionIndex] = null;
+  insertionCursor = insertionIndex - 1;
+  insertionHeld = true;
+  renderInsertionAction();
+}
+
+function insertHeldKey(index) {
+  currentArray[index] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
+  insertionIndex += 1;
+  if (insertionIndex >= roundCount) finishRound();
+  else prepareInsertionStep();
+}
+
+function chooseInsertion(moveRight) {
+  if (!running || insertionCursor < 0) return;
+  const compared = currentArray[insertionCursor];
+  const shouldMove = compared > insertionKey;
+  if (moveRight !== shouldMove) {
+    markWrong(null, shouldMove ? `${compared}이(가) 더 크므로 오른쪽으로 밀어야 해요.` : `${compared}은(는) 삽입값보다 작아요. 그대로 두고 삽입하세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (shouldMove) {
+    currentArray[insertionCursor + 1] = compared;
+    currentArray[insertionCursor] = null;
+    roundStats.movements += 1;
+    insertionCursor -= 1;
+    awardCorrect();
+    renderInsertionAction();
+    return;
+  }
+  currentArray[insertionCursor + 1] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
+  insertionIndex += 1;
+  awardCorrect();
+  if (insertionIndex >= roundCount) finishRound();
+  else prepareInsertionStep();
+}
+
+function placeInsertionKey() {
+  if (!running || insertionCursor >= 0 || insertionKey === null) return;
+  insertHeldKey(0);
+  awardCorrect();
+}
+
+function renderSelectionAction() {
+  if (selectionStart >= roundCount - 1) { finishRound(); return; }
+  ui.operationLabel.textContent = `정렬되지 않은 구간 ${selectionStart + 1}부터`;
+  ui.operationCounter.textContent = `후보 비교 ${selectionCursor - selectionStart} / ${roundCount - selectionStart - 1}`;
+  ui.operationChoices.replaceChildren();
+  if (selectionCursor < roundCount) {
+    drawOperationArray(currentArray, { min: selectionMin, check: selectionCursor, fixed: selectionFixed });
+    const currentMin = currentArray[selectionMin];
+    const candidate = currentArray[selectionCursor];
+    ui.operationQuestion.textContent = `${candidate}과 최솟값 후보 ${currentMin}을(를) 비교해요. 새 값이 더 작을까요?`;
+    addChoice("새 값으로 후보 바꾸기", () => chooseSelectionCandidate(true));
+    addChoice("현재 후보 유지", () => chooseSelectionCandidate(false));
+    updateProgress();
+    return;
+  }
+  if (selectionMin !== selectionStart) {
+    drawOperationArray(currentArray, { left: selectionStart, right: selectionMin, fixed: selectionFixed });
+    ui.operationQuestion.textContent = `최솟값 ${currentArray[selectionMin]}을(를) 앞의 ${currentArray[selectionStart]}과(와) 교환할까요?`;
+    addChoice("두 값 교환", chooseSelectionSwap);
+    addChoice("그대로 두기", () => markWrong(null, "찾은 최솟값을 정렬 구간의 첫 칸으로 보내야 해요."));
+    return;
+  }
+  selectionFixed.add(selectionStart);
+  selectionStart += 1;
+  selectionMin = selectionStart;
+  selectionCursor = selectionStart + 1;
+  renderSelectionAction();
+}
+
+function chooseSelectionCandidate(replaceCandidate) {
+  if (!running || selectionCursor >= roundCount) return;
+  const shouldReplace = currentArray[selectionCursor] < currentArray[selectionMin];
+  if (replaceCandidate !== shouldReplace) {
+    markWrong(null, shouldReplace ? "새 숫자가 더 작아요. 최솟값 후보를 바꿔야 해요." : "현재 후보가 더 작아요. 그대로 유지하세요.");
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (shouldReplace) selectionMin = selectionCursor;
+  selectionCursor += 1;
+  awardCorrect();
+  renderSelectionAction();
+}
+
+function chooseSelectionSwap() {
+  if (!running || selectionMin === selectionStart) return;
+  [currentArray[selectionStart], currentArray[selectionMin]] = [currentArray[selectionMin], currentArray[selectionStart]];
+  roundStats.movements += 1;
+  selectionFixed.add(selectionStart);
+  selectionStart += 1;
+  selectionMin = selectionStart;
+  selectionCursor = selectionStart + 1;
+  awardCorrect();
+  renderSelectionAction();
+}
+
+function renderQuickAction() {
+  while (true) {
+    if (!quickPartitionState) {
+      while (quickRanges.length) {
+        const [low, high] = quickRanges.shift();
+        if (low < high) {
+          quickPartitionState = { low, high, pivot: currentArray[low] };
+          quickLeft = low + 1;
+          quickRight = high;
+          quickPhase = "left";
+          break;
+        }
+        if (low === high) quickFixed.add(low);
+      }
+      if (!quickPartitionState) { finishRound(); return; }
+    }
+    const { low, high, pivot } = quickPartitionState;
+    if (quickPhase === "left" && quickLeft > high) quickPhase = "right";
+    if (quickPhase === "right" && quickRight <= low) quickPhase = "cross";
+    if (quickPhase === "cross") {
+      if (quickLeft < quickRight) quickPhase = "swap";
+      else if (quickRight > low) quickPhase = "pivot";
+      else { completeQuickPartition(); continue; }
+    }
+
+    drawOperationArray(currentArray, { low, high, pivot: low, left: quickLeft, right: quickRight, fixed: quickFixed });
+    ui.operationCounter.textContent = `구간 ${low + 1}–${high + 1} · L=${quickLeft + 1} · R=${quickRight + 1}`;
+    ui.operationChoices.replaceChildren();
+    if (quickPhase === "left") {
+      const value = currentArray[quickLeft];
+      ui.operationLabel.textContent = "왼쪽 포인터 비교";
+      ui.operationQuestion.textContent = `${value} ≤ Pivot ${pivot}인가요? 왼쪽 포인터를 이동할까요?`;
+      addChoice("L 오른쪽으로 이동", () => chooseQuickScan("left", true));
+      addChoice("L 멈추기", () => chooseQuickScan("left", false));
+    } else if (quickPhase === "right") {
+      const value = currentArray[quickRight];
+      ui.operationLabel.textContent = "오른쪽 포인터 비교";
+      ui.operationQuestion.textContent = `${value} > Pivot ${pivot}인가요? 오른쪽 포인터를 이동할까요?`;
+      addChoice("R 왼쪽으로 이동", () => chooseQuickScan("right", true));
+      addChoice("R 멈추기", () => chooseQuickScan("right", false));
+    } else if (quickPhase === "swap") {
+      ui.operationLabel.textContent = "포인터가 찾은 값 교환";
+      ui.operationQuestion.textContent = `왼쪽 ${currentArray[quickLeft]}과(와) 오른쪽 ${currentArray[quickRight]}의 자리를 바꿀까요?`;
+      addChoice("두 값 교환", () => chooseQuickExchange(true));
+      addChoice("그대로 두기", () => chooseQuickExchange(false));
+    } else {
+      ui.operationLabel.textContent = "Pivot을 확정 위치로 이동";
+      ui.operationQuestion.textContent = `Pivot ${pivot}과(와) R 위치의 ${currentArray[quickRight]}을(를) 교환할까요?`;
+      addChoice("Pivot 교환", () => chooseQuickPivot(true));
+      addChoice("그대로 두기", () => chooseQuickPivot(false));
+    }
+    updateProgress();
+    return;
+  }
+}
+
+function chooseQuickScan(side, move) {
+  if (!running || !quickPartitionState) return;
+  const { pivot } = quickPartitionState;
+  const index = side === "left" ? quickLeft : quickRight;
+  const shouldMove = side === "left" ? currentArray[index] <= pivot : currentArray[index] > pivot;
+  if (move !== shouldMove) {
+    markWrong(null, side === "left"
+      ? shouldMove ? `${currentArray[index]}은(는) Pivot 이하예요. L을 더 이동하세요.` : `${currentArray[index]}은(는) Pivot보다 커요. L을 멈추세요.`
+      : shouldMove ? `${currentArray[index]}은(는) Pivot보다 커요. R을 왼쪽으로 이동하세요.` : `${currentArray[index]}은(는) Pivot 이하예요. R을 멈추세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (side === "left") {
+    if (move) quickLeft += 1;
+    else quickPhase = "right";
+  } else if (move) quickRight -= 1;
+  else quickPhase = "cross";
+  awardCorrect();
+  renderQuickAction();
+}
+
+function chooseQuickExchange(swap) {
+  if (!running || quickPhase !== "swap") return;
+  if (!swap) { markWrong(null, "L이 찾은 큰 값과 R이 찾은 작은 값을 교환해야 해요."); return; }
+  [currentArray[quickLeft], currentArray[quickRight]] = [currentArray[quickRight], currentArray[quickLeft]];
+  roundStats.movements += 1;
+  quickLeft += 1;
+  quickRight -= 1;
+  quickPhase = "left";
+  awardCorrect();
+  renderQuickAction();
+}
+
+function completeQuickPartition() {
+  const { low, high } = quickPartitionState;
+  quickFixed.add(quickRight);
+  quickPartitions += 1;
+  quickRanges.unshift([quickRight + 1, high]);
+  quickRanges.unshift([low, quickRight - 1]);
+  quickPartitionState = null;
+}
+
+function insertionDestination(array, index) {
+  const key = array[index];
+  let position = 0;
+  while (position < index && array[position] < key) position += 1;
+  let comparisons = 0;
+  let movements = 0;
+  for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+    comparisons += 1;
+    if (array[cursor] <= key) break;
+    movements += 1;
+  }
+  return { key, position, comparisons, movements };
+}
+
+function chooseMinimum(id) {
+  if (!running) return;
+  const tileIndex = selectionPool.findIndex(tile => tile.id === id);
+  if (tileIndex < 0) return;
+  const tile = selectionPool[tileIndex];
+  const expected = targetArray[answer.length];
+  if (tile.value !== expected) {
+    markWrong(ui.pool.querySelector(`[aria-label="${tile.value} 선택"]`), `아쉬워요. 지금 찾는 수는 ${tile.value}보다 작아요.`);
+    return;
+  }
+  selectionPool.splice(tileIndex, 1);
+  answer.push(tile.value);
+  awardCorrect();
+  renderSelectionPool();
+  renderSortedLane();
+  if (answer.length === roundCount) finishRound();
+  else ui.message.textContent = `${tile.value} 정답! 남은 숫자 중 가장 작은 수를 찾아요.`;
+}
+
+function chooseBubble(swap) {
+  if (!running) return;
+  const action = bubbleActions[bubbleStep];
+  if (swap !== action.swap) {
+    const left = currentArray[action.left];
+    const right = currentArray[action.right];
+    markWrong(null, action.swap ? `${left}이(가) 더 커요. 큰 수를 오른쪽으로 보내야 해요.` : `${left}이(가) 이미 더 작아요. 이번에는 그대로 두세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (action.swap) {
+    [currentArray[action.left], currentArray[action.right]] = [currentArray[action.right], currentArray[action.left]];
+    roundStats.movements += 1;
+  }
+  bubbleStep += 1;
+  awardCorrect();
+  if (bubbleStep >= bubbleActions.length) finishRound();
+  else renderBubbleAction();
+}
+
+function chooseInsertion(moveRight) {
+  if (!running || insertionCursor < 0) return;
+  const compared = currentArray[insertionCursor];
+  const shouldMove = compared > insertionKey;
+  if (moveRight !== shouldMove) {
+    markWrong(null, shouldMove ? `${compared}이(가) 더 크므로 오른쪽으로 밀어야 해요.` : `${compared}은(는) 삽입값보다 작아요. 그대로 두고 삽입하세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (shouldMove) {
+    currentArray[insertionCursor + 1] = compared;
+    currentArray[insertionCursor] = null;
+    roundStats.movements += 1;
+    insertionCursor -= 1;
+    awardCorrect();
+    renderInsertionAction();
+    return;
+  }
+  currentArray[insertionCursor + 1] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
+  insertionIndex += 1;
+  awardCorrect();
+  if (insertionIndex >= roundCount) finishRound();
+  else prepareInsertionStep();
+}
+
+function chooseQuickPivot(swap) {
+  if (!running || !quickPartitionState) return;
+  const { low } = quickPartitionState;
+  if (!swap) { markWrong(null, "Pivot을 R 위치로 옮겨 작은 구간과 큰 구간을 나눠야 해요."); return; }
+  [currentArray[low], currentArray[quickRight]] = [currentArray[quickRight], currentArray[low]];
+  roundStats.movements += 1;
+  completeQuickPartition();
+  awardCorrect();
+  renderQuickAction();
+}
+
+function partitionQuick(array, low, high) {
+  const next = [...array];
+  const pivot = next[low];
+  let left = low + 1;
+  let right = high;
+  let comparisons = 0;
+  let movements = 0;
+  while (true) {
+    while (left <= high) {
+      comparisons += 1;
+      if (!(next[left] <= pivot)) break;
+      left += 1;
+    }
+    while (right > low) {
+      comparisons += 1;
+      if (!(next[right] > pivot)) break;
+      right -= 1;
+    }
+    if (left >= right) break;
+    [next[left], next[right]] = [next[right], next[left]];
+    movements += 1;
+    left += 1;
+    right -= 1;
+  }
+  if (right !== low) {
+    [next[low], next[right]] = [next[right], next[low]];
+    movements += 1;
+  }
+  return { array: next, pivot, pivotIndex: right, low, high, left, right, comparisons, movements };
+}
+
+function calculateStats(values) {
+  if (algorithm === "selection") return selectionStats(values);
+  if (algorithm === "bubble") return bubbleStats(values);
+  if (algorithm === "insertion") return insertionStats(values);
+  return quickStats(values);
+}
+
+function selectionStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let start = 0; start < array.length - 1; start += 1) {
+    let min = start;
+    for (let i = start + 1; i < array.length; i += 1) {
+      comparisons += 1;
+      if (array[i] < array[min]) min = i;
+    }
+    if (min !== start) {
+      [array[start], array[min]] = [array[min], array[start]];
+      movements += 1;
+    }
+  }
+  return { comparisons, movements };
+}
+
+function bubbleStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let end = array.length - 1; end > 0; end -= 1) {
+    let changed = false;
+    for (let left = 0; left < end; left += 1) {
+      comparisons += 1;
+      if (array[left] > array[left + 1]) {
+        [array[left], array[left + 1]] = [array[left + 1], array[left]];
+        movements += 1;
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
+  return { comparisons, movements };
+}
+
+function insertionStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  for (let i = 1; i < array.length; i += 1) {
+    const key = array[i];
+    let j = i - 1;
+    while (j >= 0) {
+      comparisons += 1;
+      if (array[j] <= key) break;
+      array[j + 1] = array[j];
+      movements += 1;
+      j -= 1;
+    }
+    array[j + 1] = key;
+  }
+  return { comparisons, movements };
+}
+
+function quickStats(values) {
+  const array = [...values];
+  let comparisons = 0;
+  let movements = 0;
+  function sort(low, high) {
+    if (low >= high) return;
+    const part = partitionQuick(array, low, high);
+    array.splice(0, array.length, ...part.array);
+    comparisons += part.comparisons;
+    movements += part.movements;
+    sort(low, part.pivotIndex - 1);
+    sort(part.pivotIndex + 1, high);
+  }
+  sort(0, array.length - 1);
+  return { comparisons, movements };
+}
+
+function markWrong(button, text) {
+  lives -= 1;
+  combo = 0;
+  updateScoreboard();
+  if (button) {
+    button.classList.remove("is-wrong");
+    void button.offsetWidth;
+    button.classList.add("is-wrong");
+  }
+  ui.message.className = "game-message is-wrong";
+  ui.message.textContent = text;
+  if (lives <= 0) endGame("기회를 모두 사용했어요.");
+}
+
+function awardCorrect() {
+  combo += 1;
+  score += 10 + Math.min((combo - 1) * 2, 10);
+  ui.message.className = "game-message is-good";
+  updateScoreboard();
+}
+
+function finishRound() {
+  stopTimer();
+  running = false;
+  finished = true;
+  const stats = calculateStats(startingArray);
+  const bonus = roundCount * 5 + remaining * 2;
+  score += bonus;
+  ui.score.textContent = String(score);
+  ui.instruction.textContent = "완벽해요! 숫자들이 줄을 섰어요.";
+  ui.message.className = "game-message is-win";
+  ui.message.textContent = `라운드 통과! 정리 보너스 +${bonus}점 · 다음 라운드에서 숫자가 하나 더 늘어요.`;
+  ui.restart.hidden = false;
+  ui.restart.textContent = "처음부터 다시";
+  ui.next.hidden = false;
+  ui.result.hidden = false;
+  ui.resultHeading.textContent = `이번 배열 ${algorithms[algorithm].name} 통계`;
+  ui.resultComparisons.textContent = String(stats.comparisons);
+  ui.resultMovements.textContent = String(stats.movements);
+  ui.resultMovementLabel.textContent = algorithms[algorithm].metric;
+  ui.operationChoices.replaceChildren();
+  ui.operationCounter.textContent = "완료";
+  ui.operationQuestion.textContent = "모든 숫자가 오름차순으로 정렬됐어요!";
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+  if (algorithm === "selection") drawOperationArray(currentArray, { fixed: selectionFixed });
+  else drawOperationArray(currentArray, algorithm === "quick" ? { fixed: quickFixed } : {});
+}
+
+function endGame(message) {
+  stopTimer();
+  running = false;
+  finished = true;
+  ui.instruction.textContent = "미션 종료";
+  ui.message.className = "game-message is-wrong";
+  ui.message.textContent = `${message} 현재 점수 ${score}점.`;
+  ui.restart.hidden = false;
+  ui.restart.textContent = "다시 도전하기";
+  ui.next.hidden = true;
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+}
+
+function resetToReady() {
+  stopTimer();
+  running = false;
+  finished = false;
+  roundNumber = 0;
+  score = 0;
+  combo = 0;
+  lives = 3;
+  startingArray = [];
+  currentArray = [];
+  targetArray = [];
+  selectionPool = [];
+  answer = [];
+  bubbleActions = [];
+  bubbleStep = 0;
+  insertionIndex = 1;
+  insertionKey = null;
+  insertionCursor = -1;
+  insertionHeld = false;
+  selectionStart = 0;
+  selectionCursor = 1;
+  selectionMin = 0;
+  selectionFixed = new Set();
+  quickRanges = [];
+  quickPartitionState = null;
+  quickPhase = "left";
+  quickLeft = 0;
+  quickRight = 0;
+  quickPartitions = 0;
+  quickFixed = new Set();
+  roundStats = { comparisons: 0, movements: 0 };
+  ui.round.textContent = "준비";
+  ui.instruction.textContent = "알고리즘을 고르고 게임을 시작하세요!";
+  ui.message.className = "game-message";
+  ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
+  ui.timer.textContent = "--:--";
+  ui.timer.classList.remove("is-low");
+  ui.timerFill.style.width = "100%";
+  ui.timerFill.classList.remove("is-low");
+  ui.pool.replaceChildren();
+  ui.lane.replaceChildren();
+  ui.operationArray.replaceChildren();
+  ui.operationChoices.replaceChildren();
+  ui.operationQuestion.textContent = "";
+  ui.operationCounter.textContent = "";
+  ui.result.hidden = true;
+  ui.start.hidden = false;
+  ui.restart.hidden = true;
+  ui.next.hidden = true;
+  ui.difficulty.forEach(button => { button.disabled = false; });
+  ui.algorithmOptions.forEach(button => { button.disabled = false; });
+  ui.selectionBoard.hidden = true;
+  ui.operationBoard.hidden = false;
+  updateScoreboard();
+}
+
+ui.difficulty.forEach(button => button.addEventListener("click", () => {
+  if (running) return;
+  baseCount = Number(button.dataset.count);
+  baseTime = Number(button.dataset.time);
+  ui.difficulty.forEach(option => {
+    const selected = option === button;
+    option.classList.toggle("is-selected", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  });
+  if (roundNumber > 0) resetToReady();
+}));
+
+ui.algorithmOptions.forEach(button => button.addEventListener("click", () => {
+  if (running) return;
+  algorithm = button.dataset.algorithm;
+  ui.algorithmOptions.forEach(option => {
+    const selected = option === button;
+    option.classList.toggle("is-selected", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  });
+  ui.algorithmDescription.textContent = algorithms[algorithm].description;
+  if (roundNumber > 0) resetToReady();
+  else {
+    ui.selectionBoard.hidden = true;
+    ui.operationBoard.hidden = false;
+  }
+}));
+
+ui.start.addEventListener("click", startJourney);
+ui.restart.addEventListener("click", () => {
+  if (running) startRound();
+  else startJourney();
+});
+ui.next.addEventListener("click", () => {
+  roundNumber += 1;
+  startRound();
+});
+
+ui.round.textContent = "준비";
+ui.timer.textContent = "--:--";
+ui.sortedCount.textContent = "0 / 0";
+ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
+ui.operationQuestion.textContent = "";
+ui.selectionBoard.hidden = true;
+ui.operationBoard.hidden = false;
+
+  </script>
+</body>
+</html>
