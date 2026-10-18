@@ -1,0 +1,164 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "정렬 알고리즘 실험실 첫 화면" [ref=e3] [cursor=pointer]:
+      - /url: "#top"
+      - generic [ref=e9]: 알고리즘 실험실
+    - generic [ref=e10]:
+      - generic [ref=e11]: 고등학교(정보)
+      - button "앱 다운로드" [ref=e13] [cursor=pointer]:
+        - img [ref=e14]
+        - text: 앱 다운로드
+  - main [ref=e16]:
+    - region "숫자들의 줄서기 작전" [ref=e17]:
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: 컴퓨터는 숫자를 어떻게 줄 세울까?
+        - heading "숫자들의 줄서기 작전" [level=1] [ref=e20]
+        - paragraph [ref=e21]: 숫자의 움직임을 한 단계씩 따라가며, 알고리즘의 생각을 눈으로 확인해 보세요.
+      - img [ref=e23]
+      - generic [ref=e35]:
+        - generic [ref=e36]: 오늘의 실험
+        - strong [ref=e37]: 01 / 04
+    - navigation "정렬 알고리즘 선택" [ref=e38]:
+      - button "01 버블 정렬" [pressed] [ref=e39] [cursor=pointer]:
+        - generic [ref=e40]: "01"
+        - generic [ref=e41]: 버블 정렬
+        - generic [ref=e42]: ↗
+      - button "02 선택 정렬" [ref=e43] [cursor=pointer]:
+        - generic [ref=e44]: "02"
+        - generic [ref=e45]: 선택 정렬
+        - generic [ref=e46]: ↗
+      - button "03 삽입 정렬" [ref=e47] [cursor=pointer]:
+        - generic [ref=e48]: "03"
+        - generic [ref=e49]: 삽입 정렬
+        - generic [ref=e50]: ↗
+      - button "04 퀵 정렬" [ref=e51] [cursor=pointer]:
+        - generic [ref=e52]: "04"
+        - generic [ref=e53]: 퀵 정렬
+        - generic [ref=e54]: ↗
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - text: ALGORITHM NOTE
+        - heading "버블 정렬 Bubble sort" [level=2] [ref=e57]
+      - paragraph [ref=e58]: 이웃한 두 값을 비교해 큰 값을 오른쪽으로 보냅니다. 한 바퀴가 끝나면 가장 큰 값 하나가 제자리를 찾습니다.
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]: 평균 시간
+          - strong [ref=e62]: O(n²)
+        - generic [ref=e63]:
+          - generic [ref=e64]: 최선 시간
+          - strong [ref=e65]: O(n)
+        - generic [ref=e66]:
+          - generic [ref=e67]: 최악 시간
+          - strong [ref=e68]: O(n²)
+        - generic [ref=e69]:
+          - generic [ref=e70]: 공간
+          - strong [ref=e71]: O(1)
+    - generic [ref=e72]:
+      - region "정렬 과정" [ref=e73]:
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - text: LIVE PLAYGROUND
+            - heading "정렬 과정" [level=2] [ref=e76]
+          - generic [ref=e77]: 준비
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]: 현재 단계
+            - strong [ref=e82]: 숫자 개수를 입력하면 숫자 입력칸이 나타납니다.
+          - generic [ref=e83]: 0 / 1
+        - img "현재 배열" [ref=e85]
+        - generic "막대 색상 범례" [ref=e86]:
+          - generic [ref=e87]: 비교 중
+          - generic [ref=e89]: 교환·이동
+          - generic [ref=e91]: 기준값
+          - generic [ref=e93]: 정렬 확정
+          - generic [ref=e95]: 음수 방향
+        - generic [ref=e98]:
+          - generic "단계 이동" [ref=e99]:
+            - button "처음으로" [disabled] [ref=e100]:
+              - generic [ref=e101]: "|◀"
+            - button "이전 단계" [disabled] [ref=e102]:
+              - generic [ref=e103]: ◀
+            - button "재생" [disabled] [ref=e104]:
+              - generic [ref=e105]: ▶
+              - generic [ref=e106]: 재생
+            - button "다음 단계" [disabled] [ref=e107]:
+              - generic [ref=e108]: ▶
+          - generic [ref=e109]:
+            - generic [ref=e110]: 재생 속도
+            - combobox "재생 속도" [ref=e111]:
+              - option "느리게"
+              - option "보통" [selected]
+              - option "빠르게"
+      - complementary [ref=e112]:
+        - region "숫자 준비하기" [ref=e113]:
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - text: YOUR DATA
+              - heading "숫자 준비하기" [level=2] [ref=e116]
+            - generic [ref=e117]: 3–15개
+          - generic [ref=e118]: 숫자 개수
+          - spinbutton "숫자 개수" [ref=e119]
+          - generic [ref=e120]: 3~15 사이에서 직접 입력하면 칸 수가 맞춰집니다.
+          - generic "데이터 예시" [ref=e121]:
+            - button "기본 예시" [ref=e122] [cursor=pointer]
+            - button "완전 역순" [ref=e123] [cursor=pointer]
+            - button "이미 정렬" [ref=e124] [cursor=pointer]
+          - generic [ref=e125]:
+            - button "무작위 생성" [ref=e126] [cursor=pointer]: ⤨ 무작위 생성
+            - generic [ref=e127]: 정수 · 소수 · 음수 지원
+          - generic "정렬할 숫자 입력"
+          - alert [ref=e128]
+          - button "이 데이터로 시작" [ref=e129] [cursor=pointer]:
+            - text: 이 데이터로 시작
+            - generic [ref=e130]: →
+        - region "실행 통계" [ref=e131]:
+          - generic [ref=e132]:
+            - generic [ref=e133]:
+              - text: RUN SUMMARY
+              - heading "실행 통계" [level=2] [ref=e134]
+            - generic [ref=e135]: 진행 중
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - generic [ref=e138]: 처음 배열
+              - strong [ref=e139]: "[]"
+            - generic [ref=e140]: ↓
+            - generic [ref=e141]:
+              - generic [ref=e142]: 현재 배열
+              - strong [ref=e143]: "[]"
+          - generic [ref=e144]:
+            - generic [ref=e145]:
+              - generic [ref=e146]: 값 비교
+              - strong [ref=e147]: "0"
+              - generic [ref=e148]: 회
+            - generic [ref=e149]:
+              - generic [ref=e150]: 교환
+              - strong [ref=e151]: "0"
+              - generic [ref=e152]: 회
+          - paragraph [ref=e153]: 비교는 값의 크기를 확인한 횟수입니다. 큰 수와 소수도 반올림 없이 비교합니다.
+    - generic [ref=e154]:
+      - article [ref=e155]:
+        - generic [ref=e156]:
+          - generic [ref=e157]:
+            - text: THINK ABOUT IT
+            - heading "핵심 개념" [level=2] [ref=e158]
+          - generic [ref=e159]: "?"
+        - paragraph [ref=e160]: 왼쪽부터 이웃한 값끼리 비교합니다. 앞의 값이 더 크면 자리를 바꾸고, 오른쪽 끝에 가장 큰 값이 쌓여 갑니다.
+        - paragraph [ref=e163]: 이미 정렬된 구간은 다시 확인하지 않아요. 한 번도 교환하지 않은 회차가 생기면 일찍 끝낼 수 있습니다.
+      - article [ref=e164]:
+        - generic [ref=e165]:
+          - generic [ref=e166]:
+            - text: CHECK YOURSELF
+            - heading "생각해 보기" [level=2] [ref=e167]
+          - generic [ref=e168]: Q.
+        - paragraph [ref=e169]: 한 회차가 끝날 때마다 어느 쪽의 값이 확정될까요?
+        - generic [ref=e170]: 내 생각을 먼저 적어 보세요
+        - textbox "내 생각을 먼저 적어 보세요" [ref=e171]:
+          - /placeholder: 왜 그렇게 생각했는지 간단히 적어보세요.
+        - generic [ref=e172]:
+          - generic [ref=e173]: 작성한 답은 저장되지 않습니다.
+          - button "답 확인하기" [disabled] [ref=e174]:
+            - text: 답 확인하기
+            - generic [ref=e175]: ＋
+    - generic [ref=e176]:
+      - generic [ref=e177]: 알고리즘은 결과뿐 아니라, 그 결과에 도달하는 생각의 과정입니다.
+      - generic [ref=e178]: "앱 다운로드: 단일 HTML · 설치와 인터넷 없이 실행"

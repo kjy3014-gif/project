@@ -1,0 +1,198 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "정렬 알고리즘 실험실 첫 화면" [ref=e3] [cursor=pointer]:
+      - /url: "#top"
+      - generic [ref=e9]: 알고리즘 실험실
+    - generic [ref=e10]:
+      - generic [ref=e11]: 정보 · 2학년
+      - button "앱 다운로드" [ref=e13] [cursor=pointer]:
+        - img [ref=e14]
+        - text: 앱 다운로드
+  - main [ref=e16]:
+    - region "정렬 알고리즘 시각화 학습 앱" [ref=e17]:
+      - generic [ref=e18]:
+        - paragraph [ref=e19]: 컴퓨터는 숫자를 어떻게 줄 세울까?
+        - heading "정렬 알고리즘 시각화 학습 앱" [level=1] [ref=e20]
+        - paragraph [ref=e21]: 숫자의 움직임을 한 단계씩 따라가며, 알고리즘의 생각을 눈으로 확인해 보세요.
+      - generic [ref=e22]:
+        - generic [ref=e23]: 오늘의 실험
+        - strong [ref=e24]: 01 / 04
+    - navigation "정렬 알고리즘 선택" [ref=e25]:
+      - button "01 버블 정렬" [pressed] [ref=e26] [cursor=pointer]:
+        - generic [ref=e27]: "01"
+        - generic [ref=e28]: 버블 정렬
+        - generic [ref=e29]: ↗
+      - button "02 선택 정렬" [ref=e30] [cursor=pointer]:
+        - generic [ref=e31]: "02"
+        - generic [ref=e32]: 선택 정렬
+        - generic [ref=e33]: ↗
+      - button "03 삽입 정렬" [ref=e34] [cursor=pointer]:
+        - generic [ref=e35]: "03"
+        - generic [ref=e36]: 삽입 정렬
+        - generic [ref=e37]: ↗
+      - button "04 퀵 정렬" [ref=e38] [cursor=pointer]:
+        - generic [ref=e39]: "04"
+        - generic [ref=e40]: 퀵 정렬
+        - generic [ref=e41]: ↗
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - text: ALGORITHM NOTE
+        - heading "버블 정렬 Bubble sort" [level=2] [ref=e44]
+      - paragraph [ref=e45]: 이웃한 두 값을 비교해 큰 값을 오른쪽으로 보냅니다. 한 바퀴가 끝나면 가장 큰 값 하나가 제자리를 찾습니다.
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]: 평균 시간
+          - strong [ref=e49]: O(n²)
+        - generic [ref=e50]:
+          - generic [ref=e51]: 최선 시간
+          - strong [ref=e52]: O(n)
+        - generic [ref=e53]:
+          - generic [ref=e54]: 최악 시간
+          - strong [ref=e55]: O(n²)
+        - generic [ref=e56]:
+          - generic [ref=e57]: 공간
+          - strong [ref=e58]: O(1)
+    - generic [ref=e59]:
+      - region "정렬 과정" [ref=e60]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - text: LIVE PLAYGROUND
+            - heading "정렬 과정" [level=2] [ref=e63]
+          - generic [ref=e64]: 준비
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: 현재 단계
+            - strong [ref=e69]: 데이터가 준비됐어요. 다음을 눌러 비교를 시작하세요.
+          - generic [ref=e70]: 0 / 41
+        - img "현재 배열 8, 3, 6, 1, 9, 4, 2" [ref=e72]:
+          - generic [ref=e73]:
+            - generic "8" [ref=e74]
+            - generic [ref=e76]: "1"
+          - generic [ref=e77]:
+            - generic "3" [ref=e78]
+            - generic [ref=e80]: "2"
+          - generic [ref=e81]:
+            - generic "6" [ref=e82]
+            - generic [ref=e84]: "3"
+          - generic [ref=e85]:
+            - generic "1" [ref=e86]
+            - generic [ref=e88]: "4"
+          - generic [ref=e89]:
+            - generic "9" [ref=e90]
+            - generic [ref=e92]: "5"
+          - generic [ref=e93]:
+            - generic "4" [ref=e94]
+            - generic [ref=e96]: "6"
+          - generic [ref=e97]:
+            - generic "2" [ref=e98]
+            - generic [ref=e100]: "7"
+        - generic "막대 색상 범례" [ref=e101]:
+          - generic [ref=e102]: 비교 중
+          - generic [ref=e104]: 교환·이동
+          - generic [ref=e106]: 기준값
+          - generic [ref=e108]: 정렬 확정
+          - generic [ref=e110]: 음수 방향
+        - generic [ref=e113]:
+          - generic "단계 이동" [ref=e114]:
+            - button "처음으로" [disabled] [ref=e115] [cursor=pointer]:
+              - generic [ref=e116]: "|◀"
+            - button "이전 단계" [disabled] [ref=e117] [cursor=pointer]:
+              - generic [ref=e118]: ◀
+            - button "재생" [ref=e119] [cursor=pointer]:
+              - generic [ref=e120]: ▶
+              - generic [ref=e121]: 재생
+            - button "다음 단계" [ref=e122] [cursor=pointer]:
+              - generic [ref=e123]: ▶
+          - generic [ref=e124]:
+            - generic [ref=e125]: 재생 속도
+            - combobox "재생 속도" [ref=e126]:
+              - option "느리게"
+              - option "보통" [selected]
+              - option "빠르게"
+      - complementary [ref=e127]:
+        - region "숫자 준비하기" [ref=e128]:
+          - generic [ref=e129]:
+            - generic [ref=e130]:
+              - text: YOUR DATA
+              - heading "숫자 준비하기" [level=2] [ref=e131]
+            - generic [ref=e132]: 3–15개
+          - generic [ref=e133]: 숫자 개수
+          - combobox "숫자 개수" [ref=e134]:
+            - option "3개"
+            - option "4개"
+            - option "5개"
+            - option "6개"
+            - option "7개" [selected]
+            - option "8개"
+            - option "9개"
+            - option "10개"
+            - option "11개"
+            - option "12개"
+            - option "13개"
+            - option "14개"
+            - option "15개"
+          - generic "데이터 예시" [ref=e135]:
+            - button "기본 예시" [ref=e136] [cursor=pointer]
+            - button "완전 역순" [ref=e137] [cursor=pointer]
+            - button "이미 정렬" [ref=e138] [cursor=pointer]
+          - generic [ref=e139]:
+            - button "무작위 생성" [ref=e140] [cursor=pointer]: ⤨ 무작위 생성
+            - generic [ref=e141]: 정수 · 소수 · 음수 지원
+          - generic "정렬할 숫자 입력" [ref=e142]:
+            - textbox "1번째 숫자" [ref=e143]: "8"
+            - textbox "2번째 숫자" [ref=e144]: "3"
+            - textbox "3번째 숫자" [ref=e145]: "6"
+            - textbox "4번째 숫자" [ref=e146]: "1"
+            - textbox "5번째 숫자" [ref=e147]: "9"
+            - textbox "6번째 숫자" [ref=e148]: "4"
+            - textbox "7번째 숫자" [ref=e149]: "2"
+          - alert [ref=e150]
+          - button "이 데이터로 시작" [ref=e151] [cursor=pointer]:
+            - text: 이 데이터로 시작
+            - generic [ref=e152]: →
+        - region "실행 통계" [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e155]:
+              - text: RUN SUMMARY
+              - heading "실행 통계" [level=2] [ref=e156]
+            - generic [ref=e157]: 진행 중
+          - generic [ref=e158]:
+            - generic [ref=e159]:
+              - generic [ref=e160]: 처음 배열
+              - strong [ref=e161]: "[8, 3, 6, 1, 9, 4, 2]"
+            - generic [ref=e162]: ↓
+            - generic [ref=e163]:
+              - generic [ref=e164]: 현재 배열
+              - strong [ref=e165]: "[8, 3, 6, 1, 9, 4, 2]"
+          - generic [ref=e166]:
+            - generic [ref=e167]:
+              - generic [ref=e168]: 값 비교
+              - strong [ref=e169]: "0"
+              - generic [ref=e170]: 회
+            - generic [ref=e171]:
+              - generic [ref=e172]: 교환
+              - strong [ref=e173]: "0"
+              - generic [ref=e174]: 회
+          - paragraph [ref=e175]: 비교는 값의 크기를 확인한 횟수입니다. 큰 수와 소수도 반올림 없이 비교합니다.
+    - generic [ref=e176]:
+      - article [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - text: THINK ABOUT IT
+            - heading "핵심 개념" [level=2] [ref=e180]
+          - generic [ref=e181]: "?"
+        - paragraph [ref=e182]: 왼쪽부터 이웃한 값끼리 비교합니다. 앞의 값이 더 크면 자리를 바꾸고, 오른쪽 끝에 가장 큰 값이 쌓여 갑니다.
+        - paragraph [ref=e185]: 이미 정렬된 구간은 다시 확인하지 않아요. 한 번도 교환하지 않은 회차가 생기면 일찍 끝낼 수 있습니다.
+      - article [ref=e186]:
+        - generic [ref=e187]:
+          - generic [ref=e188]:
+            - text: CHECK YOURSELF
+            - heading "생각해 보기" [level=2] [ref=e189]
+          - generic [ref=e190]: Q.
+        - paragraph [ref=e191]: 한 회차가 끝날 때마다 어느 쪽의 값이 확정될까요?
+        - button "답 확인하기" [ref=e192] [cursor=pointer]:
+          - text: 답 확인하기
+          - generic [ref=e193]: ＋
+    - generic [ref=e194]:
+      - generic [ref=e195]: 알고리즘은 결과뿐 아니라, 그 결과에 도달하는 생각의 과정입니다.
+      - generic [ref=e196]: "앱 다운로드: 단일 HTML · 설치와 인터넷 없이 실행"
