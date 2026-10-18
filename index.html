@@ -69,13 +69,21 @@
         </div>
         <div class="timer-track"><span id="timer-fill"></span></div>
 
-        <div class="sort-lane-wrap">
-          <div class="lane-heading"><span>정렬 완료</span><span id="sorted-count">0 / 0</span></div>
-          <div id="sorted-lane" class="sorted-lane" aria-label="정렬된 숫자"></div>
+        <div id="selection-board">
+          <div class="sort-lane-wrap">
+            <div class="lane-heading"><span>정렬 완료</span><span id="sorted-count">0 / 0</span></div>
+            <div id="sorted-lane" class="sorted-lane" aria-label="정렬된 숫자"></div>
+          </div>
+          <div class="tile-pool-wrap">
+            <div class="lane-heading"><span>숫자 더미 <small>가장 작은 수를 눌러요</small></span><span class="tap-hint">TAP A TILE</span></div>
+            <div id="number-pool" class="number-pool" role="group" aria-label="정렬할 숫자 선택"></div>
+          </div>
         </div>
-        <div class="tile-pool-wrap">
-          <div class="lane-heading"><span>숫자 더미 <small>가장 작은 수를 눌러요</small></span><span class="tap-hint">TAP A TILE</span></div>
-          <div id="number-pool" class="number-pool" role="group" aria-label="정렬할 숫자 선택"></div>
+        <div id="operation-board" class="operation-board" hidden>
+          <div class="lane-heading"><span id="operation-label">알고리즘 행동</span><span id="operation-counter"></span></div>
+          <div id="operation-array" class="operation-array"></div>
+          <p id="operation-question" class="operation-question"></p>
+          <div id="operation-choices" class="operation-choices"></div>
         </div>
 
         <p id="game-message" class="game-message" role="status" aria-live="polite">숫자를 오름차순으로 정리하면 미션 성공!</p>
@@ -98,12 +106,17 @@
         </section>
 
         <section class="algorithm-card">
-          <div class="side-heading"><span class="side-kicker">ALGORITHM INSIGHT</span><h2>게임 속 알고리즘</h2></div>
-          <div class="algorithm-chip"><span class="mini-bars" aria-hidden="true"><i></i><i></i><i></i></span><strong>선택 정렬</strong></div>
-          <p>남은 숫자 중 가장 작은 값을 골라 앞에서부터 확정해요. 지금 플레이하는 방식이 바로 선택 정렬의 핵심이에요.</p>
-          <div id="selection-result" class="selection-result" hidden>
-            <span>이번 숫자 배열의 선택 정렬 통계</span>
-            <div><strong id="selection-comparisons">0</strong><small>비교</small><b>·</b><strong id="selection-swaps">0</strong><small>교환</small></div>
+          <div class="side-heading"><span class="side-kicker">PICK YOUR ALGORITHM</span><h2>알고리즘 고르기</h2></div>
+          <div class="algorithm-options" role="group" aria-label="게임할 정렬 알고리즘">
+            <button class="algorithm-option is-selected" type="button" data-algorithm="selection" aria-pressed="true"><span class="algorithm-icon selection-icon">S</span><span><strong>선택</strong><small>최솟값 찾기</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="bubble" aria-pressed="false"><span class="algorithm-icon bubble-icon">B</span><span><strong>버블</strong><small>이웃 비교</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="insertion" aria-pressed="false"><span class="algorithm-icon insertion-icon">I</span><span><strong>삽입</strong><small>자리 끼우기</small></span></button>
+            <button class="algorithm-option" type="button" data-algorithm="quick" aria-pressed="false"><span class="algorithm-icon quick-icon">Q</span><span><strong>퀵</strong><small>Pivot 분할</small></span></button>
+          </div>
+          <p id="algorithm-description" class="algorithm-description">남은 숫자 중 가장 작은 값을 골라 앞에서부터 확정해요.</p>
+          <div id="algorithm-result" class="selection-result" hidden>
+            <span id="result-heading">이번 배열 실행 통계</span>
+            <div><strong id="result-comparisons">0</strong><small>비교</small><b>·</b><strong id="result-movements">0</strong><small id="result-movement-label">교환</small></div>
           </div>
         </section>
 
