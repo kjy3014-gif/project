@@ -15,6 +15,7 @@ html = html
   .replace(/\s*<link rel="stylesheet" href="game\.css">/, `\n  <style>\n${css}\n  </style>`)
   .replace(/\s*<script src="game\.js" defer><\/script>/, "")
   .replace('<a class="brand" href="index.html" aria-label="학습 모드 선택으로 돌아가기">', '<a class="brand" href="#top" aria-label="숫자 구조대 처음으로">')
+  .replace(/\s*<a class="mode-home-link"[^>]*>[\s\S]*?<\/a>/, "")
   .replace(/\s*<a class="study-link"[^>]*>[\s\S]*?<\/a>/, "")
   .replace(/\s*<a class="game-download"[^>]*>[\s\S]*?<\/a>/, "")
   .replace("</body>", `  <script>\n${js}\n  </script>\n</body>`);
