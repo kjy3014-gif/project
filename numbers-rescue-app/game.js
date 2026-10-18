@@ -589,6 +589,7 @@ function resetToReady() {
 function startJourney() {
   score = 0;
   combo = 0;
+  lives = 3;
   roundNumber = 1;
   startRound();
 }
@@ -1380,6 +1381,10 @@ ui.restart.addEventListener("click", () => {
 ui.next.addEventListener("click", () => {
   roundNumber += 1;
   startRound();
+});
+
+window.addEventListener("pageshow", event => {
+  if (event.persisted) resetToReady();
 });
 
 ui.round.textContent = "준비";
