@@ -3,5 +3,6 @@
 첫 화면에서 게임 모드와 학습 모드를 선택할 수 있습니다.
 `game.html`은 네 알고리즘 선택 게임, `visualizer.html`은 단계별 시각화 학습 앱입니다.
 게임 모드의 시간 제한은 스피드 모드에만 적용됩니다.
-상단의 ‘게임 받기’ 버튼은 오프라인 실행용 `sort-quest-game.html` 파일을 내려받습니다.
-게임 파일을 갱신하려면 `node build-game.js`를 실행하세요.
+첫 화면의 ‘전체 앱 받기’ 버튼은 게임·학습 모드와 실행 파일을 포함한 `numbers-rescue-app.zip`을 내려받습니다.
+게임 화면의 ‘게임 받기’ 버튼은 단일 HTML 파일을 내려받습니다.
+다운로드 파일을 갱신하려면 `node build-download.js`와 `node build-game.js`를 실행하세요.

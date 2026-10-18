@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#241b58">
+  <title>숫자 구조대 - 학습 모드 선택</title>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+  <header class="home-header">
+    <a class="home-brand" href="#home" aria-label="숫자 구조대 첫 화면">
+      <span class="brand-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>숫자 구조대</span>
+    </a>
+    <div class="home-header-actions">
+      <span class="course-label"><span></span> 정렬 알고리즘 플레이그라운드</span>
+      <a class="bundle-download" href="./numbers-rescue-app.zip" download="numbers-rescue-app.zip" aria-label="게임과 학습 모드 전체 앱 다운로드">
+        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 2.5v9m0 0 3.4-3.4M10 11.5 6.6 8.1M3.5 13.2v3.3h13v-3.3"/></svg>
+        <span>전체 앱 받기</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="home" class="home-shell">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <p class="eyebrow"><span></span> SORTING LAB · CHOOSE YOUR MODE</p>
+      <h1 id="welcome-title">숫자 줄서기,<br><em>어떻게 배워볼까요?</em></h1>
+      <p class="welcome-copy">원리를 차근차근 살펴보거나, 미션을 풀며 실력을 시험해 보세요.<br>오늘의 학습 모드를 골라 시작하면 됩니다.</p>
+      <div class="algorithm-tags" aria-label="학습할 알고리즘">
+        <span>버블 정렬</span><span>선택 정렬</span><span>삽입 정렬</span><span>퀵 정렬</span>
+      </div>
+      <div class="welcome-orbit orbit-one"></div><div class="welcome-orbit orbit-two"></div>
+      <svg class="welcome-art" viewBox="0 0 180 145" fill="none" aria-hidden="true">
+        <path d="M12 126H168" stroke="#B8B4F1" stroke-width="2" stroke-linecap="round"/>
+        <path d="M27 98C57 95 65 78 89 72C111 66 126 51 151 28" stroke="#FFD875" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 7"/>
+        <rect x="20" y="91" width="20" height="35" rx="6" fill="#FF927D"/><rect x="50" y="80" width="20" height="46" rx="6" fill="#FFBD68"/><rect x="80" y="66" width="20" height="60" rx="6" fill="#FFD875"/><rect x="110" y="49" width="20" height="77" rx="6" fill="#63D1AE"/><rect x="140" y="25" width="20" height="101" rx="6" fill="#9290FF"/>
+        <circle cx="27" cy="98" r="4" fill="#FFF"/><circle cx="89" cy="72" r="4" fill="#FFF"/><circle cx="151" cy="28" r="4" fill="#FFF"/>
+      </svg>
+    </section>
+
+    <section class="mode-section" aria-labelledby="mode-heading">
+      <div class="section-intro"><div><p class="section-kicker">PICK YOUR PATH</p><h2 id="mode-heading">나에게 맞는 모드 선택</h2></div><span class="step-count">01 <i>/</i> 02</span></div>
+      <div class="mode-grid">
+        <a class="mode-card game-card" href="game.html">
+          <div class="card-topline"><span class="mode-number">MODE 01</span><span class="mode-icon game-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 7.5h8a4 4 0 0 1 3.8 2.8l1 3.4a2.3 2.3 0 0 1-3.7 2.4l-2-1.6H8.9l-2 1.6a2.3 2.3 0 0 1-3.7-2.4l1-3.4A4 4 0 0 1 8 7.5Z" stroke="currentColor" stroke-width="1.7"/><path d="M8 10v4m-2-2h4m5-.7h.01M17 13.3h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div>
+          <div class="card-copy"><p class="card-label">PLAY & LEARN</p><h3>게임 모드</h3><p class="card-description">비교하고, 옮기고, 자리를 찾아요.<br>네 가지 알고리즘 미션에 도전하세요.</p></div>
+          <div class="card-bottom"><span>점수 · 콤보 · 라운드 미션</span><span class="card-cta">게임 시작 <b aria-hidden="true">→</b></span></div>
+          <span class="card-decoration decoration-game" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
+
+        <a class="mode-card study-card" href="visualizer.html">
+          <div class="card-topline"><span class="mode-number">MODE 02</span><span class="mode-icon study-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M7 15v-3m4 3V8m4 7V5m4 10v-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span></div>
+          <div class="card-copy"><p class="card-label">WATCH & UNDERSTAND</p><h3>학습 모드</h3><p class="card-description">숫자가 비교되고 이동하는 과정을<br>한 단계씩 천천히 살펴보세요.</p></div>
+          <div class="card-bottom"><span>원리 설명 · 단계별 시각화</span><span class="card-cta">학습 시작 <b aria-hidden="true">→</b></span></div>
+          <span class="card-decoration decoration-study" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        </a>
+      </div>
+      <p class="mode-tip"><span class="tip-mark" aria-hidden="true">i</span> 처음이라면 학습 모드로 원리를 살펴본 뒤, 게임 모드에서 도전해 보세요.</p>
+    </section>
+
+    <footer class="home-footer"><span>비교하는 방법은 달라도, 목표는 하나. 숫자를 질서 있게!</span><span>숫자 구조대 <i>·</i> 정보 수업</span></footer>
+  </main>
+</body>
+</html>
