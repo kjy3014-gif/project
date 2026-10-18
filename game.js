@@ -37,8 +37,18 @@ let roundStats = { comparisons: 0, movements: 0 };
 let bubbleActions = [];
 let bubbleStep = 0;
 let insertionIndex = 1;
+let insertionKey = null;
+let insertionCursor = -1;
+let selectionStart = 0;
+let selectionCursor = 1;
+let selectionMin = 0;
+let selectionFixed = new Set();
+let insertionHeld = false;
 let quickRanges = [];
 let quickPartitionState = null;
+let quickPhase = "left";
+let quickLeft = 0;
+let quickRight = 0;
 let quickPartitions = 0;
 let quickFixed = new Set();
 
@@ -56,14 +66,11 @@ function updateTimer() {
 }
 
 function updateProgress() {
-  let done = 0;
-  let total = roundCount;
-  if (algorithm === "selection") done = answer.length;
-  if (algorithm === "bubble") { done = bubbleStep; total = bubbleActions.length; }
-  if (algorithm === "insertion") { done = insertionIndex - 1; total = roundCount - 1; }
-  if (algorithm === "quick") { done = quickPartitions; total = roundCount - 1; }
+  const done = roundStats.comparisons + roundStats.movements;
+  const expected = roundNumber ? calculateStats(startingArray) : { comparisons: 0, movements: 0 };
+  const total = expected.comparisons + expected.movements;
   ui.progress.style.width = `${total ? Math.min(100, done / total * 100) : 0}%`;
-  ui.sortedCount.textContent = algorithm === "selection" ? `${answer.length} / ${roundCount}` : `${done} / ${total}`;
+  ui.sortedCount.textContent = `${done} / ${total}`;
 }
 
 function updateScoreboard() {
@@ -249,19 +256,30 @@ function renderSortedLane() {
 
 function drawOperationArray(values, markers = {}) {
   ui.operationArray.replaceChildren();
+  if (markers.keyValue !== undefined) {
+    const held = document.createElement("span");
+    held.className = "insertion-key";
+    held.textContent = `삽입값 ${markers.keyValue}`;
+    ui.operationArray.append(held);
+  }
   values.forEach((value, index) => {
     const tile = document.createElement("span");
     tile.className = "array-token";
+    if (value === null) tile.classList.add("is-hole");
     if (markers.left === index) tile.classList.add("is-left");
     if (markers.right === index) tile.classList.add("is-right");
+    if (markers.min === index) tile.classList.add("is-min");
+    if (markers.check === index) tile.classList.add("is-check");
     if (markers.pivot === index) tile.classList.add("is-pivot");
     if (markers.low !== undefined && (index < markers.low || index > markers.high)) tile.classList.add("is-outside");
     if (markers.fixed?.has(index)) tile.classList.add("is-fixed");
-    tile.textContent = String(value);
+    tile.textContent = value === null ? "빈 칸" : String(value);
     const labels = [];
     if (markers.pivot === index) labels.push("Pivot");
     if (markers.left === index) labels.push("L");
     if (markers.right === index) labels.push("R");
+    if (markers.min === index) labels.push("최솟값 후보");
+    if (markers.check === index) labels.push("비교값");
     if (markers.fixed?.has(index)) labels.push("확정");
     if (labels.length) {
       const badge = document.createElement("small");
@@ -578,8 +596,18 @@ function startRound() {
   bubbleActions = [];
   bubbleStep = 0;
   insertionIndex = 1;
+  insertionKey = null;
+  insertionCursor = -1;
+  insertionHeld = false;
+  selectionStart = 0;
+  selectionCursor = 1;
+  selectionMin = 0;
+  selectionFixed = new Set();
   quickRanges = [];
   quickPartitionState = null;
+  quickPhase = "left";
+  quickLeft = 0;
+  quickRight = 0;
   quickPartitions = 0;
   quickFixed = new Set();
 
@@ -592,28 +620,27 @@ function startRound() {
   ui.next.hidden = true;
   ui.difficulty.forEach(button => { button.disabled = true; });
   ui.algorithmOptions.forEach(button => { button.disabled = true; });
-  ui.selectionBoard.hidden = algorithm !== "selection";
-  ui.operationBoard.hidden = algorithm === "selection";
+  ui.selectionBoard.hidden = true;
+  ui.operationBoard.hidden = false;
 
   if (algorithm === "selection") {
-    selectionPool = shuffle(startingArray.map((value, id) => ({ value, id })));
-    ui.instruction.textContent = "남은 숫자 중 가장 작은 수를 찾아 누르세요.";
-    renderSelectionPool();
-    renderSortedLane();
+    ui.instruction.textContent = "현재 최솟값 후보와 새 값을 비교해요.";
+    renderSelectionAction();
   } else if (algorithm === "bubble") {
     bubbleActions = makeBubbleActions(startingArray);
     ui.instruction.textContent = "이웃한 두 수를 비교해 맞는 행동을 골라요.";
     renderBubbleAction();
   } else if (algorithm === "insertion") {
-    ui.instruction.textContent = "현재 값이 정렬된 구간의 어디에 들어갈지 찾아요.";
-    renderInsertionAction();
+    ui.instruction.textContent = "앞의 숫자와 삽입값을 비교해 이동 여부를 정해요.";
+    prepareInsertionStep();
   } else {
     quickRanges = [[0, roundCount - 1]];
-    ui.instruction.textContent = "포인터와 Pivot을 보고 확정 자리를 예측해요.";
+    ui.instruction.textContent = "좌우 포인터가 확인한 값의 이동 여부를 정해요.";
     renderQuickAction();
   }
-  const steps = algorithm === "bubble" ? bubbleActions.length : roundCount - 1;
-  const secondsPerStep = algorithm === "bubble" ? .75 : algorithm === "selection" ? 1.15 : 1.5;
+  const expected = calculateStats(startingArray);
+  const steps = expected.comparisons + expected.movements;
+  const secondsPerStep = algorithm === "bubble" || algorithm === "quick" ? .75 : 1.1;
   duration = Math.max(Math.max(28, baseTime - Math.max(0, roundNumber - 1) * 2), Math.ceil(steps * secondsPerStep + 12));
   remaining = duration;
   updateScoreboard();
@@ -664,8 +691,7 @@ function finishRound() {
   ui.difficulty.forEach(button => { button.disabled = false; });
   ui.algorithmOptions.forEach(button => { button.disabled = false; });
   if (algorithm === "selection") {
-    renderSortedLane();
-    renderSelectionPool();
+    drawOperationArray(currentArray, { fixed: selectionFixed });
   } else drawOperationArray(currentArray, algorithm === "quick" ? { fixed: quickFixed } : {});
 }
 
@@ -702,19 +728,30 @@ function renderSortedLane() {
 
 function drawOperationArray(values, markers = {}) {
   ui.operationArray.replaceChildren();
+  if (markers.keyValue !== undefined) {
+    const held = document.createElement("span");
+    held.className = "insertion-key";
+    held.textContent = `삽입값 ${markers.keyValue}`;
+    ui.operationArray.append(held);
+  }
   values.forEach((value, index) => {
     const tile = document.createElement("span");
     tile.className = "array-token";
+    if (value === null) tile.classList.add("is-hole");
     if (markers.left === index) tile.classList.add("is-left");
     if (markers.right === index) tile.classList.add("is-right");
+    if (markers.min === index) tile.classList.add("is-min");
+    if (markers.check === index) tile.classList.add("is-check");
     if (markers.pivot === index) tile.classList.add("is-pivot");
     if (markers.low !== undefined && (index < markers.low || index > markers.high)) tile.classList.add("is-outside");
     if (markers.fixed?.has(index)) tile.classList.add("is-fixed");
-    tile.textContent = String(value);
+    tile.textContent = value === null ? "빈 칸" : String(value);
     const labels = [];
     if (markers.pivot === index) labels.push("Pivot");
     if (markers.left === index) labels.push("L");
     if (markers.right === index) labels.push("R");
+    if (markers.min === index) labels.push("최솟값 후보");
+    if (markers.check === index) labels.push("비교값");
     if (markers.fixed?.has(index)) labels.push("확정");
     if (labels.length) {
       const badge = document.createElement("small");
@@ -742,71 +779,225 @@ function renderBubbleAction() {
 }
 
 function renderInsertionAction() {
-  if (insertionIndex >= roundCount) { finishRound(); return; }
-  const { key } = insertionDestination(currentArray, insertionIndex);
-  const prefix = currentArray.slice(0, insertionIndex);
+  if (!insertionHeld) { prepareInsertionStep(); return; }
   ui.operationLabel.textContent = "정렬된 구간에 삽입";
   ui.operationCounter.textContent = `${insertionIndex} / ${roundCount - 1}`;
-  ui.operationArray.replaceChildren();
-  const keyBadge = document.createElement("span");
-  keyBadge.className = "insertion-key";
-  keyBadge.textContent = `삽입값 ${key}`;
-  ui.operationArray.append(keyBadge);
-  const strip = document.createElement("div");
-  strip.className = "insertion-strip";
-  for (let slot = 0; slot <= prefix.length; slot += 1) {
-    const gap = document.createElement("button");
-    gap.type = "button";
-    gap.className = "insertion-gap";
-    gap.textContent = "+";
-    gap.setAttribute("aria-label", `${key}을(를) ${slot + 1}번째 자리에 삽입`);
-    gap.addEventListener("click", () => chooseInsertion(slot));
-    strip.append(gap);
-    if (slot < prefix.length) {
-      const token = document.createElement("span");
-      token.className = "array-token";
-      token.textContent = String(prefix[slot]);
-      strip.append(token);
-    }
-  }
-  const remainingValues = currentArray.slice(insertionIndex + 1);
-  if (remainingValues.length) {
-    const rest = document.createElement("span");
-    rest.className = "insertion-rest";
-    rest.textContent = `다음: ${remainingValues.join(" · ")}`;
-    strip.append(rest);
-  }
-  ui.operationArray.append(strip);
-  ui.operationQuestion.textContent = `${key}은(는) 정렬된 구간의 어느 위치에 들어갈까요?`;
+  drawOperationArray(currentArray, { left: insertionCursor, keyValue: insertionKey });
   ui.operationChoices.replaceChildren();
+  if (insertionCursor < 0) {
+    ui.operationQuestion.textContent = `빈 칸에 삽입값 ${insertionKey}을(를) 놓아주세요.`;
+    addChoice("빈 칸에 삽입", placeInsertionKey);
+  } else {
+    const compared = currentArray[insertionCursor];
+    ui.operationQuestion.textContent = `${compared} > ${insertionKey} ? 오른쪽으로 이동할까요?`;
+    addChoice("오른쪽으로 이동", () => chooseInsertion(true));
+    addChoice("그대로 두기", () => chooseInsertion(false));
+  }
   updateProgress();
 }
 
-function renderQuickAction() {
-  while (quickRanges.length) {
-    const [low, high] = quickRanges.shift();
-    if (low < high) {
-      quickPartitionState = quickPartition(currentArray, low, high);
-      ui.operationLabel.textContent = "Pivot 위치 예측";
-      ui.operationCounter.textContent = `구간 ${low + 1}–${high + 1}`;
-      drawOperationArray(currentArray, { low, high, pivot: low, left: low + 1, right: high, fixed: quickFixed });
-      ui.operationQuestion.textContent = `Pivot ${quickPartitionState.pivot}은(는) 몇 번째 자리에 놓일까요?`;
-      ui.operationChoices.replaceChildren();
-      for (let index = low; index <= high; index += 1) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "choice-button is-position";
-        button.textContent = `${index + 1}번`;
-        button.setAttribute("aria-label", `Pivot을 ${index + 1}번째 자리에 놓기`);
-        button.addEventListener("click", () => chooseQuickPivot(index));
-        ui.operationChoices.append(button);
-      }
-      updateProgress();
-      return;
-    }
-    if (low === high) quickFixed.add(low);
+function prepareInsertionStep() {
+  if (insertionIndex >= roundCount) { finishRound(); return; }
+  insertionKey = currentArray[insertionIndex];
+  currentArray[insertionIndex] = null;
+  insertionCursor = insertionIndex - 1;
+  insertionHeld = true;
+  renderInsertionAction();
+}
+
+function insertHeldKey(index) {
+  currentArray[index] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
+  insertionIndex += 1;
+  if (insertionIndex >= roundCount) finishRound();
+  else prepareInsertionStep();
+}
+
+function chooseInsertion(moveRight) {
+  if (!running || insertionCursor < 0) return;
+  const compared = currentArray[insertionCursor];
+  const shouldMove = compared > insertionKey;
+  if (moveRight !== shouldMove) {
+    markWrong(null, shouldMove ? `${compared}이(가) 더 크므로 오른쪽으로 밀어야 해요.` : `${compared}은(는) 삽입값보다 작아요. 그대로 두고 삽입하세요.`);
+    return;
   }
-  finishRound();
+  roundStats.comparisons += 1;
+  if (shouldMove) {
+    currentArray[insertionCursor + 1] = compared;
+    currentArray[insertionCursor] = null;
+    roundStats.movements += 1;
+    insertionCursor -= 1;
+    awardCorrect();
+    renderInsertionAction();
+    return;
+  }
+  currentArray[insertionCursor + 1] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
+  insertionIndex += 1;
+  awardCorrect();
+  if (insertionIndex >= roundCount) finishRound();
+  else prepareInsertionStep();
+}
+
+function placeInsertionKey() {
+  if (!running || insertionCursor >= 0 || insertionKey === null) return;
+  insertHeldKey(0);
+  awardCorrect();
+}
+
+function renderSelectionAction() {
+  if (selectionStart >= roundCount - 1) { finishRound(); return; }
+  ui.operationLabel.textContent = `정렬되지 않은 구간 ${selectionStart + 1}부터`;
+  ui.operationCounter.textContent = `후보 비교 ${selectionCursor - selectionStart} / ${roundCount - selectionStart - 1}`;
+  ui.operationChoices.replaceChildren();
+  if (selectionCursor < roundCount) {
+    drawOperationArray(currentArray, { min: selectionMin, check: selectionCursor, fixed: selectionFixed });
+    const currentMin = currentArray[selectionMin];
+    const candidate = currentArray[selectionCursor];
+    ui.operationQuestion.textContent = `${candidate}과 최솟값 후보 ${currentMin}을(를) 비교해요. 새 값이 더 작을까요?`;
+    addChoice("새 값으로 후보 바꾸기", () => chooseSelectionCandidate(true));
+    addChoice("현재 후보 유지", () => chooseSelectionCandidate(false));
+    updateProgress();
+    return;
+  }
+  if (selectionMin !== selectionStart) {
+    drawOperationArray(currentArray, { left: selectionStart, right: selectionMin, fixed: selectionFixed });
+    ui.operationQuestion.textContent = `최솟값 ${currentArray[selectionMin]}을(를) 앞의 ${currentArray[selectionStart]}과(와) 교환할까요?`;
+    addChoice("두 값 교환", chooseSelectionSwap);
+    addChoice("그대로 두기", () => markWrong(null, "찾은 최솟값을 정렬 구간의 첫 칸으로 보내야 해요."));
+    return;
+  }
+  selectionFixed.add(selectionStart);
+  selectionStart += 1;
+  selectionMin = selectionStart;
+  selectionCursor = selectionStart + 1;
+  renderSelectionAction();
+}
+
+function chooseSelectionCandidate(replaceCandidate) {
+  if (!running || selectionCursor >= roundCount) return;
+  const shouldReplace = currentArray[selectionCursor] < currentArray[selectionMin];
+  if (replaceCandidate !== shouldReplace) {
+    markWrong(null, shouldReplace ? "새 숫자가 더 작아요. 최솟값 후보를 바꿔야 해요." : "현재 후보가 더 작아요. 그대로 유지하세요.");
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (shouldReplace) selectionMin = selectionCursor;
+  selectionCursor += 1;
+  awardCorrect();
+  renderSelectionAction();
+}
+
+function chooseSelectionSwap() {
+  if (!running || selectionMin === selectionStart) return;
+  [currentArray[selectionStart], currentArray[selectionMin]] = [currentArray[selectionMin], currentArray[selectionStart]];
+  roundStats.movements += 1;
+  selectionFixed.add(selectionStart);
+  selectionStart += 1;
+  selectionMin = selectionStart;
+  selectionCursor = selectionStart + 1;
+  awardCorrect();
+  renderSelectionAction();
+}
+
+function renderQuickAction() {
+  while (true) {
+    if (!quickPartitionState) {
+      while (quickRanges.length) {
+        const [low, high] = quickRanges.shift();
+        if (low < high) {
+          quickPartitionState = { low, high, pivot: currentArray[low] };
+          quickLeft = low + 1;
+          quickRight = high;
+          quickPhase = "left";
+          break;
+        }
+        if (low === high) quickFixed.add(low);
+      }
+      if (!quickPartitionState) { finishRound(); return; }
+    }
+    const { low, high, pivot } = quickPartitionState;
+    if (quickPhase === "left" && quickLeft > high) quickPhase = "right";
+    if (quickPhase === "right" && quickRight <= low) quickPhase = "cross";
+    if (quickPhase === "cross") {
+      if (quickLeft < quickRight) quickPhase = "swap";
+      else if (quickRight > low) quickPhase = "pivot";
+      else { completeQuickPartition(); continue; }
+    }
+
+    drawOperationArray(currentArray, { low, high, pivot: low, left: quickLeft, right: quickRight, fixed: quickFixed });
+    ui.operationCounter.textContent = `구간 ${low + 1}–${high + 1} · L=${quickLeft + 1} · R=${quickRight + 1}`;
+    ui.operationChoices.replaceChildren();
+    if (quickPhase === "left") {
+      const value = currentArray[quickLeft];
+      ui.operationLabel.textContent = "왼쪽 포인터 비교";
+      ui.operationQuestion.textContent = `${value} ≤ Pivot ${pivot}인가요? 왼쪽 포인터를 이동할까요?`;
+      addChoice("L 오른쪽으로 이동", () => chooseQuickScan("left", true));
+      addChoice("L 멈추기", () => chooseQuickScan("left", false));
+    } else if (quickPhase === "right") {
+      const value = currentArray[quickRight];
+      ui.operationLabel.textContent = "오른쪽 포인터 비교";
+      ui.operationQuestion.textContent = `${value} > Pivot ${pivot}인가요? 오른쪽 포인터를 이동할까요?`;
+      addChoice("R 왼쪽으로 이동", () => chooseQuickScan("right", true));
+      addChoice("R 멈추기", () => chooseQuickScan("right", false));
+    } else if (quickPhase === "swap") {
+      ui.operationLabel.textContent = "포인터가 찾은 값 교환";
+      ui.operationQuestion.textContent = `왼쪽 ${currentArray[quickLeft]}과(와) 오른쪽 ${currentArray[quickRight]}의 자리를 바꿀까요?`;
+      addChoice("두 값 교환", () => chooseQuickExchange(true));
+      addChoice("그대로 두기", () => chooseQuickExchange(false));
+    } else {
+      ui.operationLabel.textContent = "Pivot을 확정 위치로 이동";
+      ui.operationQuestion.textContent = `Pivot ${pivot}과(와) R 위치의 ${currentArray[quickRight]}을(를) 교환할까요?`;
+      addChoice("Pivot 교환", () => chooseQuickPivot(true));
+      addChoice("그대로 두기", () => chooseQuickPivot(false));
+    }
+    updateProgress();
+    return;
+  }
+}
+
+function chooseQuickScan(side, move) {
+  if (!running || !quickPartitionState) return;
+  const { pivot } = quickPartitionState;
+  const index = side === "left" ? quickLeft : quickRight;
+  const shouldMove = side === "left" ? currentArray[index] <= pivot : currentArray[index] > pivot;
+  if (move !== shouldMove) {
+    markWrong(null, side === "left"
+      ? shouldMove ? `${currentArray[index]}은(는) Pivot 이하예요. L을 더 이동하세요.` : `${currentArray[index]}은(는) Pivot보다 커요. L을 멈추세요.`
+      : shouldMove ? `${currentArray[index]}은(는) Pivot보다 커요. R을 왼쪽으로 이동하세요.` : `${currentArray[index]}은(는) Pivot 이하예요. R을 멈추세요.`);
+    return;
+  }
+  roundStats.comparisons += 1;
+  if (side === "left") {
+    if (move) quickLeft += 1;
+    else quickPhase = "right";
+  } else if (move) quickRight -= 1;
+  else quickPhase = "cross";
+  awardCorrect();
+  renderQuickAction();
+}
+
+function chooseQuickExchange(swap) {
+  if (!running || quickPhase !== "swap") return;
+  if (!swap) { markWrong(null, "L이 찾은 큰 값과 R이 찾은 작은 값을 교환해야 해요."); return; }
+  [currentArray[quickLeft], currentArray[quickRight]] = [currentArray[quickRight], currentArray[quickLeft]];
+  roundStats.movements += 1;
+  quickLeft += 1;
+  quickRight -= 1;
+  quickPhase = "left";
+  awardCorrect();
+  renderQuickAction();
+}
+
+function completeQuickPartition() {
+  const { low, high } = quickPartitionState;
+  quickFixed.add(quickRight);
+  quickPartitions += 1;
+  quickRanges.unshift([quickRight + 1, high]);
+  quickRanges.unshift([low, quickRight - 1]);
+  quickPartitionState = null;
 }
 
 function insertionDestination(array, index) {
@@ -862,39 +1053,40 @@ function chooseBubble(swap) {
   else renderBubbleAction();
 }
 
-function chooseInsertion(slot) {
-  if (!running) return;
-  const insertion = insertionDestination(currentArray, insertionIndex);
-  if (slot !== insertion.position) {
-    markWrong(null, "작은 값은 앞에, 큰 값은 뒤에 와야 해요. 끼워 넣을 위치를 다시 골라보세요.");
+function chooseInsertion(moveRight) {
+  if (!running || insertionCursor < 0) return;
+  const compared = currentArray[insertionCursor];
+  const shouldMove = compared > insertionKey;
+  if (moveRight !== shouldMove) {
+    markWrong(null, shouldMove ? `${compared}이(가) 더 크므로 오른쪽으로 밀어야 해요.` : `${compared}은(는) 삽입값보다 작아요. 그대로 두고 삽입하세요.`);
     return;
   }
-  const prefix = currentArray.slice(0, insertionIndex);
-  prefix.splice(slot, 0, insertion.key);
-  currentArray = [...prefix, ...currentArray.slice(insertionIndex + 1)];
-  roundStats.comparisons += insertion.comparisons;
-  roundStats.movements += insertion.movements;
+  roundStats.comparisons += 1;
+  if (shouldMove) {
+    currentArray[insertionCursor + 1] = compared;
+    currentArray[insertionCursor] = null;
+    roundStats.movements += 1;
+    insertionCursor -= 1;
+    awardCorrect();
+    renderInsertionAction();
+    return;
+  }
+  currentArray[insertionCursor + 1] = insertionKey;
+  insertionKey = null;
+  insertionHeld = false;
   insertionIndex += 1;
   awardCorrect();
   if (insertionIndex >= roundCount) finishRound();
-  else renderInsertionAction();
+  else prepareInsertionStep();
 }
 
-function chooseQuickPivot(index) {
+function chooseQuickPivot(swap) {
   if (!running || !quickPartitionState) return;
-  const part = quickPartitionState;
-  if (index !== part.pivotIndex) {
-    markWrong(null, `Pivot ${part.pivot}은(는) ${part.pivotIndex + 1}번째에 놓여요. 좌우 구간을 다시 살펴보세요.`);
-    return;
-  }
-  currentArray = part.array;
-  quickFixed.add(part.pivotIndex);
-  roundStats.comparisons += part.comparisons;
-  roundStats.movements += part.movements;
-  quickPartitions += 1;
-  quickRanges.unshift([part.pivotIndex + 1, part.high]);
-  quickRanges.unshift([part.low, part.pivotIndex - 1]);
-  quickPartitionState = null;
+  const { low } = quickPartitionState;
+  if (!swap) { markWrong(null, "Pivot을 R 위치로 옮겨 작은 구간과 큰 구간을 나눠야 해요."); return; }
+  [currentArray[low], currentArray[quickRight]] = [currentArray[quickRight], currentArray[low]];
+  roundStats.movements += 1;
+  completeQuickPartition();
   awardCorrect();
   renderQuickAction();
 }
@@ -1055,10 +1247,8 @@ function finishRound() {
   ui.operationQuestion.textContent = "모든 숫자가 오름차순으로 정렬됐어요!";
   ui.difficulty.forEach(button => { button.disabled = false; });
   ui.algorithmOptions.forEach(button => { button.disabled = false; });
-  if (algorithm === "selection") {
-    renderSortedLane();
-    renderSelectionPool();
-  } else drawOperationArray(currentArray, algorithm === "quick" ? { fixed: quickFixed } : {});
+  if (algorithm === "selection") drawOperationArray(currentArray, { fixed: selectionFixed });
+  else drawOperationArray(currentArray, algorithm === "quick" ? { fixed: quickFixed } : {});
 }
 
 function endGame(message) {
@@ -1091,8 +1281,18 @@ function resetToReady() {
   bubbleActions = [];
   bubbleStep = 0;
   insertionIndex = 1;
+  insertionKey = null;
+  insertionCursor = -1;
+  insertionHeld = false;
+  selectionStart = 0;
+  selectionCursor = 1;
+  selectionMin = 0;
+  selectionFixed = new Set();
   quickRanges = [];
   quickPartitionState = null;
+  quickPhase = "left";
+  quickLeft = 0;
+  quickRight = 0;
   quickPartitions = 0;
   quickFixed = new Set();
   roundStats = { comparisons: 0, movements: 0 };
@@ -1116,8 +1316,8 @@ function resetToReady() {
   ui.next.hidden = true;
   ui.difficulty.forEach(button => { button.disabled = false; });
   ui.algorithmOptions.forEach(button => { button.disabled = false; });
-  ui.selectionBoard.hidden = algorithm !== "selection";
-  ui.operationBoard.hidden = algorithm === "selection";
+  ui.selectionBoard.hidden = true;
+  ui.operationBoard.hidden = false;
   updateScoreboard();
 }
 
@@ -1144,8 +1344,8 @@ ui.algorithmOptions.forEach(button => button.addEventListener("click", () => {
   ui.algorithmDescription.textContent = algorithms[algorithm].description;
   if (roundNumber > 0) resetToReady();
   else {
-    ui.selectionBoard.hidden = algorithm !== "selection";
-    ui.operationBoard.hidden = algorithm === "selection";
+    ui.selectionBoard.hidden = true;
+    ui.operationBoard.hidden = false;
   }
 }));
 
@@ -1164,3 +1364,5 @@ ui.timer.textContent = "--:--";
 ui.sortedCount.textContent = "0 / 0";
 ui.message.textContent = "난이도를 선택하고 숫자 줄서기 미션에 도전해요!";
 ui.operationQuestion.textContent = "";
+ui.selectionBoard.hidden = true;
+ui.operationBoard.hidden = false;
