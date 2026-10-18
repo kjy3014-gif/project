@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>숫자들의 줄서기 작전</title>
+  <script src="/__preview-bridge.js" data-preview-bridge></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="정렬 알고리즘 실험실 첫 화면">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>알고리즘 실험실</span>
+    </a>
+    <div class="topbar-actions">
+      <span class="class-label"><span class="status-dot"></span> 고등학교(정보)</span>
+      <a id="download-button" class="download-button" href="./sorting-algorithm-lab.html" download="numbers-line-up-mission.html" aria-describedby="download-help">
+        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M10 2.5v9m0 0 3.4-3.4M10 11.5 6.6 8.1M3.5 13.2v3.3h13v-3.3"/></svg>
+        앱 다운로드
+      </a>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="intro-row" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">컴퓨터는 숫자를 어떻게 줄 세울까?</p>
+        <h1 id="page-title">숫자들의 줄서기 작전</h1>
+        <p class="intro-copy">숫자의 움직임을 한 단계씩 따라가며, 알고리즘의 생각을 눈으로 확인해 보세요.</p>
+      </div>
+      <div class="sort-art" aria-hidden="true">
+        <svg viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 112H248" stroke="#8497B6" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M24 88C57 84 64 71 94 66C124 60 137 46 165 42C190 38 207 30 229 21" stroke="#EF8052" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 6"/>
+          <circle cx="24" cy="88" r="4" fill="#EF8052"/><circle cx="94" cy="66" r="4" fill="#EF8052"/><circle cx="165" cy="42" r="4" fill="#EF8052"/><circle cx="229" cy="21" r="4" fill="#EF8052"/>
+          <rect x="24" y="82" width="25" height="30" rx="5" fill="#7292D9"/>
+          <rect x="60" y="72" width="25" height="40" rx="5" fill="#829DDC"/>
+          <rect x="96" y="59" width="25" height="53" rx="5" fill="#91A9E0"/>
+          <rect x="132" y="47" width="25" height="65" rx="5" fill="#A0B3E3"/>
+          <rect x="168" y="34" width="25" height="78" rx="5" fill="#72B99A"/>
+          <rect x="204" y="20" width="25" height="92" rx="5" fill="#4CA887"/>
+        </svg>
+      </div>
+      <div class="lesson-stamp"><span>오늘의 실험</span><strong>01 <small>/ 04</small></strong></div>
+    </section>
+
+    <nav class="algorithm-tabs" aria-label="정렬 알고리즘 선택">
+      <button class="algorithm-tab is-active" type="button" data-algorithm="bubble" aria-pressed="true"><span class="tab-index">01</span><span>버블 정렬</span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+      <button class="algorithm-tab" type="button" data-algorithm="selection" aria-pressed="false"><span class="tab-index">02</span><span>선택 정렬</span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+      <button class="algorithm-tab" type="button" data-algorithm="insertion" aria-pressed="false"><span class="tab-index">03</span><span>삽입 정렬</span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+      <button class="algorithm-tab" type="button" data-algorithm="quick" aria-pressed="false"><span class="tab-index">04</span><span>퀵 정렬</span><span class="tab-arrow" aria-hidden="true">↗</span></button>
+    </nav>
+
+    <section class="algorithm-overview" aria-live="polite">
+      <div class="overview-heading">
+        <span class="section-kicker">ALGORITHM NOTE</span>
+        <h2 id="algorithm-name">버블 정렬 <span>Bubble sort</span></h2>
+      </div>
+      <p id="algorithm-summary" class="overview-summary"></p>
+      <div class="overview-meta">
+        <div><span>평균 시간</span><strong id="average-complexity">O(n²)</strong></div>
+        <div><span>최선 시간</span><strong id="best-complexity">O(n)</strong></div>
+        <div><span>최악 시간</span><strong id="worst-complexity">O(n²)</strong></div>
+        <div><span>공간</span><strong id="space-complexity">O(1)</strong></div>
+      </div>
+    </section>
+
+    <div class="workspace-grid">
+      <section class="visual-panel panel" aria-labelledby="visual-title">
+        <div class="panel-heading">
+          <div><span class="section-kicker">LIVE PLAYGROUND</span><h2 id="visual-title">정렬 과정</h2></div>
+          <span class="run-state" id="run-state"><span></span> 준비</span>
+        </div>
+        <div class="visual-caption">
+          <div><span class="step-label">현재 단계</span><strong id="step-description">데이터를 준비하고 다음을 눌러 시작하세요.</strong><span id="key-in-hand" class="key-in-hand" hidden></span></div>
+          <span id="step-count" class="step-count">0 / 0</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+        <div id="bar-chart" class="bar-chart" role="img" aria-label="정렬 전 숫자 막대그래프"></div>
+        <div class="legend" aria-label="막대 색상 범례">
+          <span><i class="legend-swatch swatch-compare"></i>비교 중</span>
+          <span><i class="legend-swatch swatch-move"></i>교환·이동</span>
+          <span><i class="legend-swatch swatch-pivot"></i>기준값</span>
+          <span><i class="legend-swatch swatch-fixed"></i>정렬 확정</span>
+          <span><i class="legend-swatch swatch-negative"></i>음수 방향</span>
+        </div>
+        <div class="pointer-readout" id="pointer-readout" aria-live="polite"></div>
+        <div class="playback-controls">
+          <div class="transport" aria-label="단계 이동">
+            <button id="first-button" class="icon-button" type="button" aria-label="처음으로" title="처음으로"><span aria-hidden="true">|◀</span></button>
+            <button id="previous-button" class="icon-button" type="button" aria-label="이전 단계" title="이전"><span aria-hidden="true">◀</span></button>
+            <button id="play-button" class="play-button" type="button"><span class="play-icon" aria-hidden="true">▶</span><span id="play-label">재생</span></button>
+            <button id="next-button" class="icon-button" type="button" aria-label="다음 단계" title="다음"><span aria-hidden="true">▶</span></button>
+          </div>
+          <label class="speed-control" for="speed-select"><span>재생 속도</span><select id="speed-select"><option value="1200">느리게</option><option value="700" selected>보통</option><option value="300">빠르게</option></select></label>
+        </div>
+      </section>
+
+      <aside class="side-column">
+        <section class="data-panel panel" aria-labelledby="data-title">
+          <div class="panel-heading compact-heading"><div><span class="section-kicker">YOUR DATA</span><h2 id="data-title">숫자 준비하기</h2></div><span class="tiny-tag">3–15개</span></div>
+          <label class="count-label" for="count-select">숫자 개수</label>
+          <input id="count-select" class="count-select" type="number" min="3" max="15" step="1" placeholder="개수 입력" inputmode="numeric" required aria-describedby="count-hint">
+          <span id="count-hint" class="count-hint">3~15 사이에서 직접 입력하면 칸 수가 맞춰집니다.</span>
+          <div class="preset-row" aria-label="데이터 예시">
+            <button type="button" data-preset="example">기본 예시</button>
+            <button type="button" data-preset="reverse">완전 역순</button>
+            <button type="button" data-preset="sorted">이미 정렬</button>
+          </div>
+          <div class="random-row"><button type="button" id="random-button" class="random-button"><span aria-hidden="true">⤨</span> 무작위 생성</button><span class="input-hint">정수 · 소수 · 음수 지원</span></div>
+          <div id="number-inputs" class="number-inputs" aria-label="정렬할 숫자 입력"></div>
+          <p id="input-error" class="input-error" role="alert"></p>
+          <button type="button" id="apply-button" class="apply-button">이 데이터로 시작 <span aria-hidden="true">→</span></button>
+        </section>
+
+        <section class="stats-panel panel" aria-labelledby="stats-title">
+          <div class="panel-heading compact-heading"><div><span class="section-kicker">RUN SUMMARY</span><h2 id="stats-title">실행 통계</h2></div><span id="completion-badge" class="completion-badge">진행 전</span></div>
+          <div class="array-summary"><div><span>처음 배열</span><strong id="initial-array">—</strong></div><span class="array-arrow" aria-hidden="true">↓</span><div><span>현재 배열</span><strong id="current-array">—</strong></div></div>
+          <div class="metric-grid">
+            <div class="metric-card"><span>값 비교</span><strong id="comparison-count">0</strong><small>회</small></div>
+            <div class="metric-card"><span id="movement-label">교환</span><strong id="movement-count">0</strong><small>회</small></div>
+          </div>
+          <p class="stats-note" id="stats-note">비교는 값의 크기를 확인한 횟수입니다. 큰 수와 소수도 반올림 없이 비교합니다.</p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="learning-grid">
+      <article class="concept-panel panel">
+        <div class="panel-heading compact-heading"><div><span class="section-kicker">THINK ABOUT IT</span><h2>핵심 개념</h2></div><span class="concept-mark" aria-hidden="true">?</span></div>
+        <p id="concept-copy"></p>
+        <div class="concept-callout"><span class="callout-line"></span><p id="teaching-tip"></p></div>
+      </article>
+      <article class="question-panel panel">
+        <div class="panel-heading compact-heading"><div><span class="section-kicker">CHECK YOURSELF</span><h2>생각해 보기</h2></div><span class="question-number">Q.</span></div>
+        <p id="question-copy" class="question-copy"></p>
+        <label class="student-answer-label" for="student-answer">내 생각을 먼저 적어 보세요</label>
+        <textarea id="student-answer" class="student-answer" rows="3" maxlength="500" placeholder="왜 그렇게 생각했는지 간단히 적어보세요."></textarea>
+        <div class="answer-actions">
+          <span class="answer-privacy">작성한 답은 저장되지 않습니다.</span>
+          <button id="answer-toggle" class="answer-toggle" type="button" aria-expanded="false" aria-controls="answer-copy" disabled>답 확인하기 <span aria-hidden="true">＋</span></button>
+        </div>
+        <p id="answer-copy" class="answer-copy" hidden></p>
+      </article>
+    </section>
+
+    <footer class="page-footer"><span>알고리즘은 결과뿐 아니라, 그 결과에 도달하는 생각의 과정입니다.</span><span id="download-help">앱 다운로드: 단일 HTML · 설치와 인터넷 없이 실행</span></footer>
+  </main>
+</body>
+</html>
